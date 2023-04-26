@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Server.dir/main.cpp.o CMakeFiles/Server.dir/src/Fields.cpp.o CMakeFiles/Server.dir/src/GameManager.cpp.o CMakeFiles/Server.dir/src/Object.cpp.o CMakeFiles/Server.dir/src/PackedData.cpp.o CMakeFiles/Server.dir/src/utils/debug.cpp.o CMakeFiles/Server.dir/src/sys/InetNetworker.cpp.o -o Server  -lthr 
