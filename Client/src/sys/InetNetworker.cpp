@@ -61,14 +61,14 @@ void InetNetworker::connect(std::string address)
 void InetNetworker::disconnect()
 {
     m_running = false;
-    m_talk_thread.join();
+    m_talk_thread->join();
 }
 
 PackedData InetNetworker::receive_snapshot()
 {
+    std::lock_guard<std::mutex> lock(m_snapshots_mtx);
     if(m_snapshots.size() > 0)
     {
-        std::lock_guard<std::mutex> lock(m_snapshots_mtx);
         PackedData snapshot = m_snapshots.front();
         m_snapshots.pop();
         return snapshot;
@@ -97,6 +97,7 @@ void InetNetworker::talk_loop()
         }
 
         m_snapshots_mtx.lock();
+        // debug("SNAPSHOT");
         m_snapshots.push(snapshot);
         m_snapshots_mtx.unlock();
 

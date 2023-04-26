@@ -226,6 +226,8 @@ void InetNetworker::remove_client(long long client_id)
     m_clients_mtx.unlock();
     
     m_clients_count--;
+
+    debug("Client disconnected");
 }
 
 }

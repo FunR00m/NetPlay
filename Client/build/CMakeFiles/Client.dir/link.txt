@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/Client.dir/main.cpp.o CMakeFiles/Client.dir/src/GameManager.cpp.o CMakeFiles/Client.dir/src/Object.cpp.o CMakeFiles/Client.dir/src/Fields.cpp.o CMakeFiles/Client.dir/src/PackedData.cpp.o CMakeFiles/Client.dir/src/utils/debug.cpp.o CMakeFiles/Client.dir/src/sys/InetNetworker.cpp.o -o Client  -lthr 

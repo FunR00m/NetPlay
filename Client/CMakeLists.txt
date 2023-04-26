@@ -18,7 +18,9 @@ add_executable(Client
 )
 
 # Добавляем необходимые библиотеки, если нужно
-target_link_libraries(Client thr)
+if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
+        target_link_libraries(Client thr)
+endif()
 
 # Указываем директорию для собранных бинарных файлов
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
