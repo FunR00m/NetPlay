@@ -139,15 +139,43 @@ PackedData Object::pack()
     PackedData data;
     data += m_id.pack();
     data += m_name;
-    data += m_parent->get_id().pack();
+    if(m_parent == nullptr)
+    {
+        data += IntField(-1).pack();
+    } else {
+        data += m_parent->get_id().pack();
+    }
     
     data += IntField(m_components.size()).pack();
     for(auto elem : m_components)
     {
+        data += elem.first;
         data += elem.second->pack();
     }
     
     return data;
+}
+
+void Object::unpack(PackedData data)
+{
+    m_components.clear();
+
+    IntField component_count;
+    component_count.unpack(data.take());
+
+    for(int i = 0; i < component_count; i++)
+    {
+        const char *component_name = data.take().get_data().data();
+        std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
+        component->unpack(data.take());
+        m_components[component_name] = component;
+    }
+}
+
+void Object::apply_changes(PackedData data)
+{
+    fixme("[Object::apply_changes] stub");
+    unpack(data);
 }
 
 }

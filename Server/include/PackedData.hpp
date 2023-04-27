@@ -46,6 +46,9 @@ public:
     /// - Parameter new_data: Строка, которую нужно добавить
     ///
     void operator += (std::string new_data);
+
+    /// Удаляет первый упакованный пакет данных и возвращает его.
+    PackedData take();
     
     /// Возвращает размер хранимых данных.
     DataSize get_size();

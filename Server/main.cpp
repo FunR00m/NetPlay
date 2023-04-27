@@ -25,6 +25,12 @@ public:
     
     Event<Vec2Field> move_event;
     
+    Transform()
+    {
+        pos = { 0, 0 };
+        motion = { 0, 0 };
+    }
+
     PackedData pack() override
     {
         PackedData data;
@@ -39,6 +45,18 @@ public:
         data += pos.fetch_changes();
         data += motion.fetch_changes();
         return data;
+    }
+
+    void unpack(PackedData data) override
+    {
+        pos.unpack(data.take());
+        motion.unpack(data.take());
+    }
+
+    void apply_changes(PackedData data) override
+    {
+        pos.apply_changes(data.take());
+        motion.apply_changes(data.take());
     }
 };
 
@@ -127,5 +145,5 @@ int network_test()
 
 int main()
 {
-    return network_test();
+    return game_test();
 }

@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "GameManager.hpp"
+#include "sys/InetNetworker.hpp"
 
 namespace engine
 {
@@ -21,6 +22,8 @@ GameManager::GameManager()
     m_objects.push_back(m_root);
     
     m_max_id = 0;
+
+    m_networker = std::make_shared<sys::InetNetworker>();
     
     m_running = false;
 }
@@ -87,6 +90,7 @@ void GameManager::start()
     }
     
     m_running = true;
+    m_networker->start_listening();
     game_loop();
 }
 
@@ -98,8 +102,26 @@ void GameManager::game_loop()
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             system->tick();
+            m_networker->send_snapshot(pack());
         }
     }
+}
+
+PackedData GameManager::pack()
+{
+    PackedData data;
+    data += IntField(m_objects.size()).pack();
+    for(auto object : m_objects)
+    {
+        data += object->pack();
+    }
+
+    return data;
+}
+
+std::shared_ptr<IComponent> GameManager::create_component(const char* name)
+{
+    return m_component_manager->create(name);
 }
 
 }

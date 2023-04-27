@@ -23,6 +23,8 @@ class IComponent
 public:
     virtual PackedData pack() = 0;
     virtual PackedData fetch_changes() = 0;
+    virtual void unpack(PackedData data) = 0;
+    virtual void apply_changes(PackedData data) = 0;
 };
 
 }

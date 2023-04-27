@@ -6,6 +6,7 @@
 //
 
 #include "Fields.hpp"
+#include "utils/debug.hpp"
 
 namespace engine
 {
@@ -28,7 +29,7 @@ IntField::operator long long()
 
 PackedData IntField::pack()
 {
-    return PackedData((void*)m_number, sizeof(m_number));
+    return PackedData((void*)&m_number, sizeof(m_number));
 }
 
 PackedData IntField::fetch_changes()
@@ -39,6 +40,28 @@ PackedData IntField::fetch_changes()
     } else {
         m_prev = m_number;
         return pack();
+    }
+}
+
+void IntField::unpack(PackedData data)
+{
+    if(data.get_size() != sizeof(m_number))
+    {
+        error("[IntField::unpack] Unable to unpack the data.");
+    }
+    m_number = *(int*) data.get_data().data();
+}
+
+void IntField::apply_changes(PackedData data)
+{
+    if(data.get_size() == 0)
+    {
+        return;
+    } else if(data.get_size() == sizeof(m_number))
+    {
+        unpack(data);
+    } else {
+        error("[IntField::apply_changes] Unable to apply changes.");
     }
 }
 
@@ -81,6 +104,18 @@ PackedData Vec2Field::fetch_changes()
     data += x.fetch_changes();
     data += y.fetch_changes();
     return data;
+}
+
+void Vec2Field::unpack(PackedData data)
+{
+    x.unpack(data.take());
+    y.unpack(data.take());
+}
+
+void Vec2Field::apply_changes(PackedData data)
+{
+    x.apply_changes(data.take());
+    y.apply_changes(data.take());
 }
 
 void Vec2Field::operator += (Vec2Field b)

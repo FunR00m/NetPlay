@@ -13,6 +13,7 @@
 //                                                              //
 
 #include "PackedData.hpp"
+#include "debug.hpp"
 
 namespace engine
 {
@@ -64,6 +65,36 @@ void PackedData::operator += (std::string new_data)
     {
         m_data.push_back(elem);
     }
+}
+
+PackedData PackedData::take()
+{
+    DataSize packet_size;
+    if(m_size < sizeof(packet_size))
+    {
+        error("[PackedData::take()] Can't get the packet size. The data is too short.");
+    }
+    packet_size = *(DataSize*)m_data.data();
+    if(packet_size > m_size - sizeof(packet_size))
+    {
+        error("[PackedData::take()] The data is shorter than the packet size.");
+    }
+    
+    for(DataSize i = 0; i < sizeof(packet_size); i++)
+    {
+        m_data.erase(m_data.begin());
+    }
+    
+    std::vector<char> packet_data;
+    for(DataSize i = 0; i < packet_size; i++)
+    {
+        packet_data.push_back(m_data.front());
+        m_data.erase(m_data.begin());
+    }
+    
+    m_size -= packet_size + sizeof(DataSize);
+    
+    return PackedData(packet_data);
 }
 
 DataSize PackedData::get_size()

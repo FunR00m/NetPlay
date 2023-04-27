@@ -30,6 +30,8 @@ public:
     IntField(long long number);
     PackedData pack() override;
     PackedData fetch_changes() override;
+    void unpack(PackedData data) override;
+    void apply_changes(PackedData data) override;
     
     IntField operator += (IntField b);
     IntField operator -= (IntField b);
@@ -48,6 +50,8 @@ public:
     Vec2Field(IntField x, IntField y);
     PackedData pack() override;
     PackedData fetch_changes() override;
+    void unpack(PackedData data) override;
+    void apply_changes(PackedData data) override;
     
     void operator += (Vec2Field b);
     

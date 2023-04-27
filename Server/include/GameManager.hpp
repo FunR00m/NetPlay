@@ -32,6 +32,7 @@
 #include "IComponent.hpp"
 #include "ISystem.hpp"
 #include "INetworker.hpp"
+#include "ComponentManager.hpp"
 
 namespace engine
 {
@@ -85,6 +86,8 @@ public:
     
     /// Запускает системы и входит в игровой цикл.
     void start();
+
+    std::shared_ptr<IComponent> create_component(const char* name);
     
 private:
     /// Словарь вида *номер объекта-объект*
@@ -106,9 +109,13 @@ private:
     std::vector<std::shared_ptr<ISystem>> m_systems;
     
     std::shared_ptr<INetworker> m_networker;
+
+    std::shared_ptr<ComponentManager> m_component_manager;
     
     /// Функция главного игрового цикла.
     void game_loop();
+
+    PackedData pack();
 };
 
 }
