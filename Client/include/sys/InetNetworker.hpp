@@ -32,7 +32,7 @@ public:
 
     PackedData receive_snapshot() override;
     
-    void send_snapshot(PackedData snapshot) override;
+    void send_response(PackedData response) override;
 
 private:
     std::atomic_bool m_running;
@@ -40,10 +40,10 @@ private:
     std::queue<PackedData> m_snapshots;
     std::mutex m_snapshots_mtx;
 
-    std::queue<PackedData> m_client_snapshots;
-    std::mutex m_client_snapshots_mtx;
+    std::queue<PackedData> m_responses;
+    std::mutex m_responses_mtx;
 
-    std::atomic_int m_client_snapshots_size;
+    std::atomic_int m_responses_size;
 
     int m_socket;
 

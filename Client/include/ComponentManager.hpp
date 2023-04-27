@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "IComponent.hpp"
+#include "utils/debug.hpp"
 
 #ifndef ComponentManager_hpp
 #define ComponentManager_hpp
@@ -23,10 +24,13 @@ public:
             + name
             + "' has already been registered");
         }
-        m_factories[name] = factory<T>();
+        // std::shared_ptr<IComponent> (*func)(ComponentManager*);
+        // func = &ComponentManager::factory<T>;
+        // func(this);
+        m_factories[name] = &ComponentManager::factory<T>;
     }
 
-    std::shared_ptr<IComponent> create(const char *name)
+    std::shared_ptr<IComponent> create(char *name)
     {
         if(m_factories.find(name) == m_factories.end())
         {
@@ -39,12 +43,13 @@ public:
     }
 
 private:
-    std::unordered_map<const char*, std::function<std::shared_ptr<IComponent>()>> m_factories;
+    // std::unordered_map<const char*, std::function<std::shared_ptr<IComponent>(ComponentManager*)>> m_factories;
+    std::unordered_map<std::string, std::shared_ptr<engine::IComponent> (*)()> m_factories;
 
     template<typename T>
-    std::shared_ptr<IComponent> factory()
+    static std::shared_ptr<IComponent> factory()
     {
-        return std::make_shared<T>();
+        return std::static_pointer_cast<IComponent>(std::make_shared<T>());
     }
 };
 

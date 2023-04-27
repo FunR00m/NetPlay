@@ -748,8 +748,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/Users/fedor/Programs/NetPlay/Server/build",
-		"source" : "/Users/fedor/Programs/NetPlay/Server"
+		"build" : "/Users/fedor/Programs/NetPlay/Client/build",
+		"source" : "/Users/fedor/Programs/NetPlay/Client"
 	},
 	"version" : 
 	{

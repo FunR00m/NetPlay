@@ -13,7 +13,7 @@
 //                                                              //
 
 #include "PackedData.hpp"
-#include "debug.hpp"
+#include "utils/debug.hpp"
 
 namespace engine
 {
@@ -79,7 +79,6 @@ PackedData PackedData::take()
     {
         error("[PackedData::take()] The data is shorter than the packet size.");
     }
-    
     for(DataSize i = 0; i < sizeof(packet_size); i++)
     {
         m_data.erase(m_data.begin());

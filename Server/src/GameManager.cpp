@@ -98,12 +98,12 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         for(std::shared_ptr<ISystem> system : m_systems)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
             system->tick();
-            m_networker->send_snapshot(pack());
         }
+        m_networker->send_snapshot(pack());
     }
 }
 

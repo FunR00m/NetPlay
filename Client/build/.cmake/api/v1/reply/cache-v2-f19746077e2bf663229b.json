@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/fedor/Programs/NetPlay/Server/build"
+			"value" : "/Users/fedor/Programs/NetPlay/Client/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -475,7 +475,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/fedor/Programs/NetPlay/Server/build/CMakeFiles/pkgRedirects"
+			"value" : "/Users/fedor/Programs/NetPlay/Client/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -535,7 +535,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/fedor/Programs/NetPlay/Server"
+			"value" : "/Users/fedor/Programs/NetPlay/Client"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -819,7 +819,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "Server"
+			"value" : "Client"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1102,7 +1102,7 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "Server_BINARY_DIR",
+			"name" : "Client_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1111,10 +1111,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/fedor/Programs/NetPlay/Server/build"
+			"value" : "/Users/fedor/Programs/NetPlay/Client/build"
 		},
 		{
-			"name" : "Server_IS_TOP_LEVEL",
+			"name" : "Client_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1126,7 +1126,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "Server_SOURCE_DIR",
+			"name" : "Client_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1135,7 +1135,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/fedor/Programs/NetPlay/Server"
+			"value" : "/Users/fedor/Programs/NetPlay/Client"
 		}
 	],
 	"kind" : "cache",

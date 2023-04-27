@@ -31,8 +31,8 @@ public:
     virtual PackedData receive_snapshot() = 0;
 
     /// @brief Отправляет пакет данных на сервер.
-    /// @param snapshot Упакованные данные пакета
-    virtual void send_snapshot(PackedData snapshot) = 0;
+    /// @param response Упакованные данные пакета
+    virtual void send_response(PackedData response) = 0;
 };
 
 }

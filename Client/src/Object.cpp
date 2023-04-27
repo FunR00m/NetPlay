@@ -1,8 +1,8 @@
 //
 //  Object.cpp
-//  Client
+//  Server
 //
-//  Created by Fedor Fedor on 19.04.2023.
+//  Created by Fedor Fedor on 02.04.2023.
 //
 
 #include "Object.hpp"
@@ -12,11 +12,29 @@
 namespace engine
 {
 
-Object::Object(long long id, std::shared_ptr<Object> parent, GameManager* game_manager)
+Object::Object(long long id, long long parent_id, GameManager* game_manager)
 {
     m_id = id;
-    m_parent = parent;
+    m_parent_id = parent_id;
     m_game_manager = game_manager;
+}
+
+Object::Object(PackedData data)
+{
+    m_id.unpack(data.take());
+    m_name = data.take().get_data().data();
+    m_parent_id.unpack(data.take());
+    
+    IntField components_size;
+    components_size.unpack(data.take());
+    m_components.clear();
+    for(int i = 0; i < components_size; i++)
+    {
+        char *component_name = data.take().get_data().data();
+        std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
+        PackedData component_data = data.take();
+        component->unpack(component_data);
+    }    
 }
 
 std::shared_ptr<IComponent> Object::get_component(const char* name)
@@ -74,17 +92,19 @@ std::shared_ptr<Object> Object::add_child(std::shared_ptr<Object> child)
 void Object::set_name(std::string name)
 {
     m_name = name;
-    if(m_parent)
+    auto parent = get_parent();
+    if(parent)
     {
-        m_parent->set_child_name(m_id, name);
+        parent->set_child_name(m_id, name);
     }
 }
 
 void Object::clear_name()
 {
-    if(m_parent)
+    auto parent = get_parent();
+    if(parent)
     {
-        m_parent->clear_child_name(m_name);
+        parent->clear_child_name(m_name);
     }
     m_name.clear();
 }
@@ -131,7 +151,7 @@ IntField Object::get_id()
 
 std::shared_ptr<Object> Object::get_parent()
 {
-    return m_parent;
+    return m_game_manager->get_object(m_parent_id);
 }
 
 PackedData Object::pack()
@@ -139,16 +159,48 @@ PackedData Object::pack()
     PackedData data;
     data += m_id.pack();
     data += m_name;
-    data += m_parent->get_id().pack();
+    if(m_parent_id == -1)
+    {
+        data += IntField(-1).pack();
+    } else {
+        data += m_parent_id.pack();
+    }
     
     data += IntField(m_components.size()).pack();
     for(auto elem : m_components)
     {
+        data += elem.first;
         data += elem.second->pack();
     }
     
     return data;
 }
 
+void Object::unpack(PackedData data)
+{
+    m_id.unpack(data.take());
+    m_name = data.take().get_data().data();
+    m_parent_id.unpack(data.take());
+
+    m_components.clear();
+
+    IntField component_count;
+    component_count.unpack(data.take());
+
+    for(int i = 0; i < component_count; i++)
+    {
+        auto name_data = data.take().get_data();
+        char *component_name = name_data.data();
+        std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
+        component->unpack(data.take());
+        m_components[component_name] = component;
+    }
 }
 
+void Object::apply_changes(PackedData data)
+{
+    fixme("[Object::apply_changes] stub");
+    unpack(data);
+}
+
+}

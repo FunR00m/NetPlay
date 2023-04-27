@@ -1,10 +1,10 @@
 //  __________-----------================-----------__________  //
 //  =====================<  NETPLAY  4  >=====================  //
 //  | Проект: NetPlay Client 4                               |  //
-//  | Файл: CGameManager.hpp                                 |  //
+//  | Файл: GameManager.hpp                                  |  //
 //  | Автор: Fedor Buben <bubenfedor0@gmail.com>             |  //
-//  | Дата создания: 20.04.2023                              |  //
-//  | Дата изменения: 20.04.2023                             |  //
+//  | Дата создания: 07.04.2023                              |  //
+//  | Дата изменения: 07.04.2023                             |  //
 //  | Описание: GameManager - сердце игры.                   |  //
 //  |--------------------------------------------------------|  //
 //  | ПОДРОБНОЕ ОПИСАНИЕ                                     |  //
@@ -32,6 +32,7 @@
 #include "IComponent.hpp"
 #include "ISystem.hpp"
 #include "INetworker.hpp"
+#include "ComponentManager.hpp"
 
 namespace engine
 {
@@ -85,6 +86,14 @@ public:
     
     /// Запускает системы и входит в игровой цикл.
     void start();
+
+    std::shared_ptr<IComponent> create_component(char* name);
+
+    template<typename T>
+    void register_component()
+    {
+        m_component_manager->register_component<T>();
+    }
     
 private:
     /// Словарь вида *номер объекта-объект*
@@ -106,9 +115,13 @@ private:
     std::vector<std::shared_ptr<ISystem>> m_systems;
     
     std::shared_ptr<INetworker> m_networker;
+
+    std::shared_ptr<ComponentManager> m_component_manager;
     
     /// Функция главного игрового цикла.
     void game_loop();
+
+    void unpack(PackedData data);
 };
 
 }

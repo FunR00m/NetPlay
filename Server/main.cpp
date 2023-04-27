@@ -79,7 +79,7 @@ public:
                 transform->pos = { 1, 2 };
                 transform->move_event.invoke(transform->pos);
                 
-                std::cout << obj->get_name() + ": " << transform->pos.x << ' ' << transform->pos.y << '\n';
+                // std::cout << obj->get_name() + ": " << transform->pos.x << ' ' << transform->pos.y << '\n';
             }
         }
     }
@@ -90,7 +90,7 @@ private:
 
 void move_listener(Vec2Field pos)
 {
-    std::cout << "MOVE EVENT: " << pos.x << ' ' << pos.y << '\n';
+    // std::cout << "MOVE EVENT: " << pos.x << ' ' << pos.y << '\n';
 }
 
 int game_test()
@@ -100,6 +100,8 @@ int game_test()
     std::shared_ptr<MoveSystem> move_system = std::make_shared<MoveSystem>();
     game.add_system(move_system);
     
+    game.get_root()->set_name("Root");
+
     auto box = game.add_object("Box");
     auto box_transform = box->add_component<Transform>();
     box_transform->move_event += move_listener;

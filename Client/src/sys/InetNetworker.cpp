@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <strings.h>
 
 #include "sys/InetNetworker.hpp"
 #include "utils/debug.hpp"
@@ -77,12 +78,12 @@ PackedData InetNetworker::receive_snapshot()
     }
 }
 
-void InetNetworker::send_snapshot(PackedData snapshot)
+void InetNetworker::send_response(PackedData response)
 {
-    m_client_snapshots_mtx.lock();
-    m_client_snapshots.push(snapshot);
-    m_client_snapshots_size += 1;
-    m_client_snapshots_mtx.unlock();
+    m_responses_mtx.lock();
+    m_responses.push(response);
+    m_responses_size += 1;
+    m_responses_mtx.unlock();
 }
 
 void InetNetworker::talk_loop()
@@ -101,15 +102,15 @@ void InetNetworker::talk_loop()
         m_snapshots.push(snapshot);
         m_snapshots_mtx.unlock();
 
-        while(m_client_snapshots_size == 0);
-        m_client_snapshots_mtx.lock();
-        if(m_client_snapshots.size() > 0)
+        while(m_responses_size == 0);
+        m_responses_mtx.lock();
+        if(m_responses.size() > 0)
         {
-            m_client_snapshots_size -= 1;
-            snapshot = m_client_snapshots.front();
-            m_client_snapshots.pop();
+            m_responses_size -= 1;
+            snapshot = m_responses.front();
+            m_responses.pop();
         }
-        m_client_snapshots_mtx.unlock();
+        m_responses_mtx.unlock();
 
         send_data(m_socket, snapshot);
     }
