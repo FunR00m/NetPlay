@@ -45,8 +45,6 @@ std::shared_ptr<IComponent> Object::get_component(std::string name)
         return nullptr;
     }
 
-    debug("Getting component " + name);
-    
     return m_components[name];
 }
 
@@ -195,7 +193,8 @@ void Object::unpack(PackedData data)
         char *component_name = name_data.data();
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         component->unpack(data.take());
-        m_components[typeid(*component).name()] = component;
+        std::string type_name = m_game_manager->get_component_type_name(component_name);
+        m_components[type_name] = component;
     }
 }
 

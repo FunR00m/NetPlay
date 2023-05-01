@@ -155,7 +155,7 @@ PackedData StringField::fetch_changes()
 
 void StringField::unpack(PackedData data)
 {
-    m_string = data.get_data().data();
+    m_string = data.take().get_data().data();
 }
 
 void StringField::apply_changes(PackedData data)

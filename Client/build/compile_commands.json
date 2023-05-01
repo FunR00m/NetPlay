@@ -58,5 +58,10 @@
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
   "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/sys/RendererSDL.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/sys/RendererSDL.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/sys/RendererSDL.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/ComponentManager.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/ComponentManager.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/ComponentManager.cpp"
 }
 ]

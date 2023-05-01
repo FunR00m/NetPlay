@@ -73,6 +73,7 @@ int game_test()
     sprite->size.x = 200;
     sprite->size.y = 200;
     sprite->name.s() = "/Users/fedor/Pictures/2022-06-25 23-04-54.JPG";
+    debug(sprite->name.s());
     
     game.start();
     

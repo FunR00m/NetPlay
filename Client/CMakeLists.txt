@@ -22,6 +22,7 @@ add_executable(Client
         src/Systems/RenderSystem.cpp
         src/sys/TextureSDL.cpp
         src/sys/RendererSDL.cpp
+        src/ComponentManager.cpp
 )
 
 # Добавляем необходимые библиотеки, если нужно

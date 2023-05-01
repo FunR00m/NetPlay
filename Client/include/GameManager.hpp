@@ -94,6 +94,8 @@ public:
     {
         m_component_manager->register_component<T>(name);
     }
+
+    std::string get_component_type_name(std::string component_name);
     
 private:
     /// Словарь вида *номер объекта-объект*

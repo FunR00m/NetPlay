@@ -115,7 +115,7 @@ void GameManager::game_loop()
         {
             system->tick();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         m_networker->send_response(PackedData((void*)"1", 1));
     }
 }
@@ -141,6 +141,11 @@ void GameManager::unpack(PackedData data)
 std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 {
     return m_component_manager->create(name);
+}
+
+std::string GameManager::get_component_type_name(std::string component_name)
+{
+    return m_component_manager->get_type_name(component_name);
 }
 
 }
