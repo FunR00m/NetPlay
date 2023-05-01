@@ -15,6 +15,8 @@ add_executable(Server
         src/PackedData.cpp
         src/utils/debug.cpp
         src/sys/InetNetworker.cpp
+        src/Components/Transform.cpp
+        src/Components/Sprite.cpp
 )
 
 # Добавляем необходимые библиотеки, если нужно

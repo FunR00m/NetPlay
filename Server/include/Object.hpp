@@ -127,7 +127,7 @@ public:
     
 private:
     /// Словарь вида *имя типа компонента-указатель на него*
-    std::unordered_map<const char*, std::shared_ptr<IComponent>> m_components;
+    std::unordered_map<std::string, std::shared_ptr<IComponent>> m_components;
     
     /// Словарь вида *имя дочернего объекта-указатель на него*
     std::unordered_map<std::string, std::shared_ptr<Object>> m_name_to_child;

@@ -15,22 +15,18 @@ class ComponentManager
 {
 public:
     template<typename T>
-    void register_component()
+    void register_component(std::string name)
     {
-        const char *name = typeid(T).name();
         if(m_factories.find(name) != m_factories.end())
         {
             warning(std::string("[ComponentManager.register_component] Component type with name '")
             + name
             + "' has already been registered");
         }
-        // std::shared_ptr<IComponent> (*func)(ComponentManager*);
-        // func = &ComponentManager::factory<T>;
-        // func(this);
         m_factories[name] = &ComponentManager::factory<T>;
     }
 
-    std::shared_ptr<IComponent> create(char *name)
+    std::shared_ptr<IComponent> create(std::string name)
     {
         if(m_factories.find(name) == m_factories.end())
         {

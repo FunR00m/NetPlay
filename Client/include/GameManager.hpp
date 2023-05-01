@@ -87,12 +87,12 @@ public:
     /// Запускает системы и входит в игровой цикл.
     void start();
 
-    std::shared_ptr<IComponent> create_component(char* name);
+    std::shared_ptr<IComponent> create_component(std::string name);
 
     template<typename T>
-    void register_component()
+    void register_component(std::string name)
     {
-        m_component_manager->register_component<T>();
+        m_component_manager->register_component<T>(name);
     }
     
 private:

@@ -98,6 +98,20 @@ build CMakeFiles/Server.dir/src/sys/InetNetworker.cpp.o: CXX_COMPILER__Server_De
   OBJECT_DIR = CMakeFiles/Server.dir
   OBJECT_FILE_DIR = CMakeFiles/Server.dir/src/sys
 
+build CMakeFiles/Server.dir/src/Components/Transform.cpp.o: CXX_COMPILER__Server_Debug /Users/fedor/Programs/NetPlay/Server/src/Components/Transform.cpp || cmake_object_order_depends_target_Server
+  DEP_FILE = CMakeFiles/Server.dir/src/Components/Transform.cpp.o.d
+  FLAGS = -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20
+  INCLUDES = -I/Users/fedor/Programs/NetPlay/Server/include
+  OBJECT_DIR = CMakeFiles/Server.dir
+  OBJECT_FILE_DIR = CMakeFiles/Server.dir/src/Components
+
+build CMakeFiles/Server.dir/src/Components/Sprite.cpp.o: CXX_COMPILER__Server_Debug /Users/fedor/Programs/NetPlay/Server/src/Components/Sprite.cpp || cmake_object_order_depends_target_Server
+  DEP_FILE = CMakeFiles/Server.dir/src/Components/Sprite.cpp.o.d
+  FLAGS = -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20
+  INCLUDES = -I/Users/fedor/Programs/NetPlay/Server/include
+  OBJECT_DIR = CMakeFiles/Server.dir
+  OBJECT_FILE_DIR = CMakeFiles/Server.dir/src/Components
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Server
@@ -106,7 +120,7 @@ build CMakeFiles/Server.dir/src/sys/InetNetworker.cpp.o: CXX_COMPILER__Server_De
 #############################################
 # Link the executable Server
 
-build Server: CXX_EXECUTABLE_LINKER__Server_Debug CMakeFiles/Server.dir/main.cpp.o CMakeFiles/Server.dir/src/Fields.cpp.o CMakeFiles/Server.dir/src/GameManager.cpp.o CMakeFiles/Server.dir/src/Object.cpp.o CMakeFiles/Server.dir/src/PackedData.cpp.o CMakeFiles/Server.dir/src/utils/debug.cpp.o CMakeFiles/Server.dir/src/sys/InetNetworker.cpp.o
+build Server: CXX_EXECUTABLE_LINKER__Server_Debug CMakeFiles/Server.dir/main.cpp.o CMakeFiles/Server.dir/src/Fields.cpp.o CMakeFiles/Server.dir/src/GameManager.cpp.o CMakeFiles/Server.dir/src/Object.cpp.o CMakeFiles/Server.dir/src/PackedData.cpp.o CMakeFiles/Server.dir/src/utils/debug.cpp.o CMakeFiles/Server.dir/src/sys/InetNetworker.cpp.o CMakeFiles/Server.dir/src/Components/Transform.cpp.o CMakeFiles/Server.dir/src/Components/Sprite.cpp.o
   FLAGS = -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk
   OBJECT_DIR = CMakeFiles/Server.dir
   POST_BUILD = :
@@ -158,14 +172,14 @@ build all: phony Server
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Users/fedor/Programs/NetPlay/Server/CMakeLists.txt /opt/local/share/cmake-3.24/Modules/CMakeCInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /opt/local/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /opt/local/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /opt/local/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/local/share/cmake-3.24/Modules/Compiler/Clang.cmake /opt/local/share/cmake-3.24/Modules/Compiler/GNU.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin.cmake /opt/local/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.3/CMakeCCompiler.cmake CMakeFiles/3.24.3/CMakeCXXCompiler.cmake CMakeFiles/3.24.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /Users/fedor/Programs/NetPlay/Server/CMakeLists.txt /opt/local/share/cmake-3.24/Modules/CMakeCInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /opt/local/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /opt/local/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /opt/local/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/local/share/cmake-3.24/Modules/Compiler/Clang.cmake /opt/local/share/cmake-3.24/Modules/Compiler/GNU.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin.cmake /opt/local/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.4/CMakeCCompiler.cmake CMakeFiles/3.24.4/CMakeCXXCompiler.cmake CMakeFiles/3.24.4/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Users/fedor/Programs/NetPlay/Server/CMakeLists.txt /opt/local/share/cmake-3.24/Modules/CMakeCInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /opt/local/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /opt/local/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /opt/local/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/local/share/cmake-3.24/Modules/Compiler/Clang.cmake /opt/local/share/cmake-3.24/Modules/Compiler/GNU.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin.cmake /opt/local/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.3/CMakeCCompiler.cmake CMakeFiles/3.24.3/CMakeCXXCompiler.cmake CMakeFiles/3.24.3/CMakeSystem.cmake: phony
+build /Users/fedor/Programs/NetPlay/Server/CMakeLists.txt /opt/local/share/cmake-3.24/Modules/CMakeCInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCXXInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeCommonLanguageInclude.cmake /opt/local/share/cmake-3.24/Modules/CMakeGenericSystem.cmake /opt/local/share/cmake-3.24/Modules/CMakeInitializeConfigs.cmake /opt/local/share/cmake-3.24/Modules/CMakeLanguageInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInformation.cmake /opt/local/share/cmake-3.24/Modules/CMakeSystemSpecificInitialize.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Compiler/AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/local/share/cmake-3.24/Modules/Compiler/Clang.cmake /opt/local/share/cmake-3.24/Modules/Compiler/GNU.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-C.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang-CXX.cmake /opt/local/share/cmake-3.24/Modules/Platform/Apple-Clang.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin-Initialize.cmake /opt/local/share/cmake-3.24/Modules/Platform/Darwin.cmake /opt/local/share/cmake-3.24/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.24.4/CMakeCCompiler.cmake CMakeFiles/3.24.4/CMakeCXXCompiler.cmake CMakeFiles/3.24.4/CMakeSystem.cmake: phony
 
 
 #############################################

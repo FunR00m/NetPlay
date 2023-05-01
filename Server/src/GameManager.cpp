@@ -119,7 +119,7 @@ PackedData GameManager::pack()
     return data;
 }
 
-std::shared_ptr<IComponent> GameManager::create_component(const char* name)
+std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 {
     return m_component_manager->create(name);
 }

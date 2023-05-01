@@ -149,7 +149,7 @@ PackedData Object::pack()
     data += IntField(m_components.size()).pack();
     for(auto elem : m_components)
     {
-        data += std::string(elem.first);
+        data += elem.second->get_name();
         data += elem.second->pack();
     }
     

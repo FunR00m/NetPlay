@@ -18,6 +18,8 @@
 #ifndef IntField_hpp
 #define IntField_hpp
 
+#include <string>
+
 #include "IField.hpp"
 
 namespace engine
@@ -27,7 +29,7 @@ class IntField : public IField
 {
 public:
     IntField();
-    IntField(long long number);
+    IntField(int number);
     PackedData pack() override;
     PackedData fetch_changes() override;
     void unpack(PackedData data) override;
@@ -36,11 +38,11 @@ public:
     IntField operator += (IntField b);
     IntField operator -= (IntField b);
     
-    operator long long ();
+    operator int ();
     
 private:
-    long long m_number;
-    long long m_prev;
+    int m_number;
+    int m_prev;
 };
 
 class Vec2Field : public IField
@@ -56,6 +58,25 @@ public:
     void operator += (Vec2Field b);
     
     IntField x, y;
+};
+
+class StringField : public IField
+{
+public:
+    StringField();
+    StringField(std::string string);
+
+    PackedData pack() override;
+    PackedData fetch_changes() override;
+    void unpack(PackedData data) override;
+    void apply_changes(PackedData data) override;
+
+    operator std::string();
+    
+    std::string &s();
+
+private:
+    std::string m_string;
 };
 
 }

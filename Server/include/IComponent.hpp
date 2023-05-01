@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "IField.hpp"
 #include "PackedData.hpp"
@@ -25,6 +26,7 @@ public:
     virtual PackedData fetch_changes() = 0;
     virtual void unpack(PackedData data) = 0;
     virtual void apply_changes(PackedData data) = 0;
+    virtual std::string get_name() = 0;
 };
 
 }

@@ -11,62 +11,24 @@
 
 #include "GameManager.hpp"
 #include "Event.hpp"
+
+#include "Components/Transform.hpp"
+#include "Components/Sprite.hpp"
+#include "Systems/RenderSystem.hpp"
 #include "sys/InetNetworker.hpp"
 
 using namespace engine;
 
-class Transform : public IComponent
-{
-public:
-    Vec2Field pos;
-    Vec2Field motion;
-    
-    Event<Vec2Field> move_event;
-    
-    Transform()
-    {
-        pos = { 0, 0 };
-        motion = { 0, 0 };
-    }
-
-    PackedData pack() override
-    {
-        PackedData data;
-        data += pos.pack();
-        data += motion.pack();
-        return data;
-    }
-    
-    PackedData fetch_changes() override
-    {
-        PackedData data;
-        data += pos.fetch_changes();
-        data += motion.fetch_changes();
-        return data;
-    }
-
-    void unpack(PackedData data) override
-    {
-        pos.unpack(data.take());
-        motion.unpack(data.take());
-    }
-
-    void apply_changes(PackedData data) override
-    {
-        pos.apply_changes(data.take());
-        motion.apply_changes(data.take());
-    }
-};
 
 class TestSystem : public ISystem
 {
 public:
-    void start(GameManager *game_manager)
+    void start(GameManager *game_manager) override
     {
         m_game_manager = game_manager;
     }
 
-    void tick()
+    void tick() override
     {
         for(auto obj : m_game_manager->get_objects())
         {
@@ -116,8 +78,10 @@ int network_test()
 int game_test()
 {
     GameManager game_manager;
-    game_manager.register_component<Transform>();
+    game_manager.register_component<Transform>("Transform");
+    game_manager.register_component<Sprite>("Sprite");
     game_manager.add_system(std::make_shared<TestSystem>());
+    game_manager.add_system(std::make_shared<RenderSystem>());
     game_manager.start();
 
     return 0;

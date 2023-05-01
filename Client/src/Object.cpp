@@ -37,13 +37,15 @@ Object::Object(PackedData data)
     }    
 }
 
-std::shared_ptr<IComponent> Object::get_component(const char* name)
+std::shared_ptr<IComponent> Object::get_component(std::string name)
 {
     if(m_components.find(name) == m_components.end())
     {
         //warning(std::string("[Object::get_component(\"") + std::string(name) + std::string("\")] Component not found. Object ID: " + std::to_string(m_id)));
         return nullptr;
     }
+
+    debug("Getting component " + name);
     
     return m_components[name];
 }
@@ -193,7 +195,7 @@ void Object::unpack(PackedData data)
         char *component_name = name_data.data();
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         component->unpack(data.take());
-        m_components[component_name] = component;
+        m_components[typeid(*component).name()] = component;
     }
 }
 

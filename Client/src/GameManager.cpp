@@ -138,7 +138,7 @@ void GameManager::unpack(PackedData data)
     }
 }
 
-std::shared_ptr<IComponent> GameManager::create_component(char* name)
+std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 {
     return m_component_manager->create(name);
 }

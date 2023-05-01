@@ -161,7 +161,7 @@ private:
     ///
     /// - Parameter name: Имя типа компонента
     ///
-    std::shared_ptr<IComponent> get_component(const char* name);
+    std::shared_ptr<IComponent> get_component(std::string name);
     
     /// Меняет имя дочернего объекта во внутреннем словаре имён.
     ///

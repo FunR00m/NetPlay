@@ -5,8 +5,8 @@
 //  Created by Fedor Fedor on 07.04.2023.
 //
 
-#ifndef ISystem_h
-#define ISystem_h
+#ifndef ISystem_hpp
+#define ISystem_hpp
 
 namespace engine
 {
@@ -22,4 +22,4 @@ public:
 
 }
 
-#endif /* ISystem_h */
+#endif /* ISystem_hpp */

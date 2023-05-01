@@ -1,37 +1,62 @@
 [
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/main.cpp.o -c /Users/fedor/Programs/NetPlay/Client/main.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/main.cpp.o -c /Users/fedor/Programs/NetPlay/Client/main.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/main.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/GameManager.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/GameManager.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/GameManager.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/GameManager.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/GameManager.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Object.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Object.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Object.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Object.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/Object.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Fields.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Fields.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Fields.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Fields.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/Fields.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/PackedData.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/PackedData.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/PackedData.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/PackedData.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/PackedData.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/utils/debug.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/utils/debug.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/utils/debug.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/utils/debug.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/utils/debug.cpp"
 },
 {
   "directory": "/Users/fedor/Programs/NetPlay/Client/build",
-  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/sys/InetNetworker.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/sys/InetNetworker.cpp",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/sys/InetNetworker.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/sys/InetNetworker.cpp",
   "file": "/Users/fedor/Programs/NetPlay/Client/src/sys/InetNetworker.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Components/Transform.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Components/Transform.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/Components/Transform.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Components/Sprite.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Components/Sprite.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/Components/Sprite.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/Systems/RenderSystem.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/Systems/RenderSystem.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/Systems/RenderSystem.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/sys/TextureSDL.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/sys/TextureSDL.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/sys/TextureSDL.cpp"
+},
+{
+  "directory": "/Users/fedor/Programs/NetPlay/Client/build",
+  "command": "/usr/bin/clang++ -I/Users/fedor/Programs/NetPlay/Client/include -I/Users/fedor/Programs/NetPlay/Client/third-party/include -g -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk -std=gnu++20 -o CMakeFiles/Client.dir/src/sys/RendererSDL.cpp.o -c /Users/fedor/Programs/NetPlay/Client/src/sys/RendererSDL.cpp",
+  "file": "/Users/fedor/Programs/NetPlay/Client/src/sys/RendererSDL.cpp"
 }
 ]

@@ -17,12 +17,12 @@ IntField::IntField()
     m_prev = -1;
 }
 
-IntField::IntField(long long number)
+IntField::IntField(int number)
 {
     m_number = number;
     m_prev = number - 1;
 }
-IntField::operator long long()
+IntField::operator int()
 {
     return m_number;
 }
@@ -122,6 +122,51 @@ void Vec2Field::operator += (Vec2Field b)
 {
     x += b.x;
     y += b.y;
+}
+
+
+StringField::StringField()
+{
+    m_string.clear();
+}
+
+StringField::StringField(std::string string)
+{
+    m_string = string;
+}
+
+StringField::operator std::__1::string()
+{
+    return m_string;
+}
+
+PackedData StringField::pack()
+{
+    PackedData data;
+    data += m_string;
+    return data;
+}
+
+PackedData StringField::fetch_changes()
+{
+    fixme("[StringField::fetch_changes] stub");
+    return pack();
+}
+
+void StringField::unpack(PackedData data)
+{
+    m_string = data.get_data().data();
+}
+
+void StringField::apply_changes(PackedData data)
+{
+    fixme("[StringField::apply_changes] stub");
+    return unpack(data);
+}
+
+std::string &StringField::s()
+{
+    return m_string;
 }
 
 }

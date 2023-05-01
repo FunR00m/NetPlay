@@ -13,52 +13,11 @@
 
 #include "GameManager.hpp"
 #include "Event.hpp"
+#include "Components/Transform.hpp"
+#include "Components/Sprite.hpp"
 #include "sys/InetNetworker.hpp"
 
 using namespace engine;
-
-class Transform : public IComponent
-{
-public:
-    Vec2Field pos;
-    Vec2Field motion;
-    
-    Event<Vec2Field> move_event;
-    
-    Transform()
-    {
-        pos = { 0, 0 };
-        motion = { 0, 0 };
-    }
-
-    PackedData pack() override
-    {
-        PackedData data;
-        data += pos.pack();
-        data += motion.pack();
-        return data;
-    }
-    
-    PackedData fetch_changes() override
-    {
-        PackedData data;
-        data += pos.fetch_changes();
-        data += motion.fetch_changes();
-        return data;
-    }
-
-    void unpack(PackedData data) override
-    {
-        pos.unpack(data.take());
-        motion.unpack(data.take());
-    }
-
-    void apply_changes(PackedData data) override
-    {
-        pos.apply_changes(data.take());
-        motion.apply_changes(data.take());
-    }
-};
 
 class MoveSystem : public ISystem
 {
@@ -76,7 +35,6 @@ public:
             if(transform)
             {
                 transform->pos += transform->motion;
-                transform->pos = { 1, 2 };
                 transform->move_event.invoke(transform->pos);
                 
                 // std::cout << obj->get_name() + ": " << transform->pos.x << ' ' << transform->pos.y << '\n';
@@ -103,12 +61,18 @@ int game_test()
     game.get_root()->set_name("Root");
 
     auto box = game.add_object("Box");
+
     auto box_transform = box->add_component<Transform>();
-    box_transform->move_event += move_listener;
-    
+    box_transform->move_event += move_listener; 
     box_transform->pos.x = 10;
     box_transform->pos.y = 20;
-    box_transform->motion.x = 5;
+    box_transform->motion.x = 1;
+
+    auto sprite = box->add_component<Sprite>();
+    sprite->pos = box_transform->pos;
+    sprite->size.x = 200;
+    sprite->size.y = 200;
+    sprite->name.s() = "/Users/fedor/Pictures/2022-06-25 23-04-54.JPG";
     
     game.start();
     

@@ -87,7 +87,7 @@ public:
     /// Запускает системы и входит в игровой цикл.
     void start();
 
-    std::shared_ptr<IComponent> create_component(const char* name);
+    std::shared_ptr<IComponent> create_component(std::string name);
     
 private:
     /// Словарь вида *номер объекта-объект*
