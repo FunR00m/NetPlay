@@ -86,6 +86,35 @@ int game_test()
 
     return 0;
 }
+
+int render_test()
+{
+    sys::RendererSDL renderer;
+    renderer.setup();
+
+    auto texture = std::make_shared<sys::TextureSDL>();
+    texture->load("/Users/fedor/Pictures/2022-06-25 23-04-54.JPG");
+
+    auto sprite = std::make_shared<Sprite>();
+    sprite->pos = { 50, 50 };
+    sprite->size = { 200, 200 };
+    sprite->name.s() = "hello";
+    sprite->texture = texture;
+    
+    bool running = true;
+    int n = 2;
+    while(running)
+    {
+        n += 2;
+        if(n % 2 != 0)
+        {
+            running = false;
+        }
+        renderer.refresh();
+        renderer.render_sprite(sprite);
+    }
+}
+
 int main(int argc, const char * argv[]) {
     // GameManager game_manager;
     // auto box = game_manager.add_object();
@@ -93,5 +122,5 @@ int main(int argc, const char * argv[]) {
     
     // std::cout << game_manager.get_root()->get_child("Box")->get_name() << std::endl;
 
-    return game_test();
+    return render_test();
 }
