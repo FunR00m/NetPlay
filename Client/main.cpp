@@ -35,7 +35,7 @@ public:
             auto transform = obj->get_component<Transform>();
             if(transform)
             {
-                debug("Wow! Transform!");
+                debug("Transform!");
                 debug(std::to_string(transform->pos.x));
             }
         }
@@ -93,7 +93,7 @@ int render_test()
     renderer.setup();
 
     auto texture = std::make_shared<sys::TextureSDL>();
-    texture->load("/Users/fedor/Pictures/2022-06-25 23-04-54.JPG");
+    texture->load("/home/fedor/Documents/Projects/netplay/image.png");
 
     auto sprite = std::make_shared<Sprite>();
     sprite->pos = { 50, 50 };
@@ -110,9 +110,13 @@ int render_test()
         {
             running = false;
         }
-        renderer.refresh();
+        
         renderer.render_sprite(sprite);
+        renderer.refresh();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
+
+    return 0;
 }
 
 int main(int argc, const char * argv[]) {
@@ -122,5 +126,5 @@ int main(int argc, const char * argv[]) {
     
     // std::cout << game_manager.get_root()->get_child("Box")->get_name() << std::endl;
 
-    return render_test();
+    return game_test();
 }

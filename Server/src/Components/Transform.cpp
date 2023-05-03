@@ -1,4 +1,5 @@
 #include "Components/Transform.hpp"
+#include "utils/debug.hpp"
 
 namespace engine
 {
@@ -37,9 +38,9 @@ void Transform::apply_changes(PackedData data)
     motion.apply_changes(data.take());
 }
 
-constexpr std::string Transform::get_name()
+std::string Transform::get_name()
 {
-    return "Transform";
+    return std::string("Transform");
 }
 
 }

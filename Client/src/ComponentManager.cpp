@@ -9,7 +9,7 @@ std::shared_ptr<IComponent> ComponentManager::create(std::string name)
 {
     if(m_factories.find(name) == m_factories.end())
     {
-        error(std::string("[ComponentManager.register_component] Component type with name '")
+        error(std::string("[ComponentManager::create] Component type with name '")
         + name
         + "' has not been registered");
         return nullptr;

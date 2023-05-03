@@ -20,9 +20,9 @@ add_executable(Server
 )
 
 # Добавляем необходимые библиотеки, если нужно
-if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
+# if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
         target_link_libraries(Server thr)
-endif()
+# endif()
 
 # Указываем директорию для собранных бинарных файлов
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

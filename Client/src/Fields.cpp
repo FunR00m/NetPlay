@@ -1,6 +1,6 @@
 //
 //  Fields.cpp
-//  Server
+//  Client
 //
 //  Created by Fedor Fedor on 03.04.2023.
 //
@@ -155,7 +155,9 @@ PackedData StringField::fetch_changes()
 
 void StringField::unpack(PackedData data)
 {
-    m_string = data.take().get_data().data();
+    std::vector<char> string_data = data.take().get_data();
+    string_data.push_back(0);                                   // Заключающий ноль
+    m_string = string_data.data();                              // Создание строки из нуль-терминированной строки
 }
 
 void StringField::apply_changes(PackedData data)

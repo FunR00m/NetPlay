@@ -26,9 +26,9 @@ add_executable(Client
 )
 
 # Добавляем необходимые библиотеки, если нужно
-if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
+# if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
         target_link_libraries(Client thr)
-endif()
+# endif()
 
 target_link_directories(Client PUBLIC ${CMAKE_SOURCE_DIR}/third-party/lib)
 target_link_libraries(Client SDL2 SDL2_image)

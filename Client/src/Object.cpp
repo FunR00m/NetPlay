@@ -189,10 +189,13 @@ void Object::unpack(PackedData data)
 
     for(int i = 0; i < component_count; i++)
     {
-        auto name_data = data.take().get_data();
-        char *component_name = name_data.data();
+        std::vector<char> name_data = data.take().get_data();   // Взятие данных
+        name_data.push_back(0);                                 // Заключающий строку ноль
+        char *component_name = name_data.data();                // Нуль-терминированная строка из данных массива
+
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         component->unpack(data.take());
+        
         std::string type_name = m_game_manager->get_component_type_name(component_name);
         m_components[type_name] = component;
     }

@@ -32,11 +32,15 @@ public:
         for(auto obj : m_game_manager->get_objects())
         {
             auto transform = obj->get_component<Transform>();
+            auto sprite = obj->get_component<Sprite>();
             if(transform)
             {
                 transform->pos += transform->motion;
                 transform->move_event.invoke(transform->pos);
-                
+                if(sprite)
+                {
+                    sprite->pos = transform->pos;
+                }
                 // std::cout << obj->get_name() + ": " << transform->pos.x << ' ' << transform->pos.y << '\n';
             }
         }
@@ -64,16 +68,15 @@ int game_test()
 
     auto box_transform = box->add_component<Transform>();
     box_transform->move_event += move_listener; 
-    box_transform->pos.x = 10;
-    box_transform->pos.y = 20;
-    box_transform->motion.x = 1;
+    box_transform->pos.x = 90;
+    box_transform->pos.y = 90;
+    box_transform->motion.x = 5;
 
     auto sprite = box->add_component<Sprite>();
     sprite->pos = box_transform->pos;
     sprite->size.x = 200;
     sprite->size.y = 200;
-    sprite->name.s() = "/Users/fedor/Pictures/2022-06-25 23-04-54.JPG";
-    debug(sprite->name.s());
+    sprite->name.s() = "/home/fedor/Documents/Projects/netplay/image.png";
     
     game.start();
     

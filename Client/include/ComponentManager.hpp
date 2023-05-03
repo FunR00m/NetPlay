@@ -27,7 +27,7 @@ public:
         }
         if(m_factories.find(name) != m_factories.end())
         {
-            warning(std::string("[ComponentManager.register_component] Component type with name '")
+            warning(std::string("[ComponentManager::register_component] Component type with name '")
             + name
             + "' has already been registered");
         }

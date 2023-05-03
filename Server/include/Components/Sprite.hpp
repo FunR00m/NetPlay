@@ -25,7 +25,7 @@ public:
 
     void apply_changes(PackedData data) override;
 
-    constexpr std::string get_name() override;
+    std::string get_name() override;
 };
 
 

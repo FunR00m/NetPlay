@@ -71,7 +71,7 @@ void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
     std::shared_ptr<ITexture> texture = sprite->texture;
     Vec2Field pos = sprite->pos;
     Vec2Field size = sprite->size;
-    debug("Rendering texture " + sprite->name.s());
+    
     if(!texture->is_loaded())
     {
         return;
