@@ -1,3 +1,0 @@
-/home/fedor/Documents/Projects/netplay/Server/build/CMakeFiles/Server.dir
-/home/fedor/Documents/Projects/netplay/Server/build/CMakeFiles/edit_cache.dir
-/home/fedor/Documents/Projects/netplay/Server/build/CMakeFiles/rebuild_cache.dir

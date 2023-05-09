@@ -95,6 +95,17 @@ void RendererSDL::refresh()
 {
     SDL_RenderPresent(renderer_);
     SDL_RenderClear(renderer_);
+    
+    SDL_Event event;
+    while(SDL_PollEvent(&event))
+    {
+        if(event.type == SDL_QUIT)
+        {
+            debug("Stopping!");
+            stop();
+            break;
+        }
+    }
 }
 
 void RendererSDL::stop()

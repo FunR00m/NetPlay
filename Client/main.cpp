@@ -32,12 +32,7 @@ public:
     {
         for(auto obj : m_game_manager->get_objects())
         {
-            auto transform = obj->get_component<Transform>();
-            if(transform)
-            {
-                debug("Transform!");
-                debug(std::to_string(transform->pos.x));
-            }
+            // Пока пусто
         }
     }
 
@@ -93,7 +88,7 @@ int render_test()
     renderer.setup();
 
     auto texture = std::make_shared<sys::TextureSDL>();
-    texture->load("/home/fedor/Documents/Projects/netplay/image.png");
+    texture->load("image.png");
 
     auto sprite = std::make_shared<Sprite>();
     sprite->pos = { 50, 50 };

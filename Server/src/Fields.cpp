@@ -142,9 +142,9 @@ StringField::operator std::__1::string()
 
 PackedData StringField::pack()
 {
-    PackedData data;
-    data += m_string;
-    return data;
+    // Создание упакованных данных из строки. Используется размер
+    // m_string.size() + 1 для учёта заключающего нуля.
+    return PackedData((void*)m_string.c_str(), m_string.size() + 1);
 }
 
 PackedData StringField::fetch_changes()
@@ -155,9 +155,7 @@ PackedData StringField::fetch_changes()
 
 void StringField::unpack(PackedData data)
 {
-    std::vector<char> string_data = data.take().get_data();
-    string_data.push_back(0);                                   // Заключающий ноль
-    m_string = string_data.data();                              // Создание строки из нуль-терминированной строки
+    m_string = data.get_data().data();
 }
 
 void StringField::apply_changes(PackedData data)

@@ -15,40 +15,11 @@
 #include "Event.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Sprite.hpp"
+#include "Systems/MoveSystem.hpp"
+
 #include "sys/InetNetworker.hpp"
 
 using namespace engine;
-
-class MoveSystem : public ISystem
-{
-public:
-    void start(GameManager *game_manager) override
-    {
-        m_game_manager = game_manager;
-    }
-    
-    void tick() override
-    {
-        for(auto obj : m_game_manager->get_objects())
-        {
-            auto transform = obj->get_component<Transform>();
-            auto sprite = obj->get_component<Sprite>();
-            if(transform)
-            {
-                transform->pos += transform->motion;
-                transform->move_event.invoke(transform->pos);
-                if(sprite)
-                {
-                    sprite->pos = transform->pos;
-                }
-                // std::cout << obj->get_name() + ": " << transform->pos.x << ' ' << transform->pos.y << '\n';
-            }
-        }
-    }
-
-private:
-    GameManager *m_game_manager;
-};
 
 void move_listener(Vec2Field pos)
 {
@@ -76,7 +47,7 @@ int game_test()
     sprite->pos = box_transform->pos;
     sprite->size.x = 200;
     sprite->size.y = 200;
-    sprite->name.s() = "/home/fedor/Documents/Projects/netplay/image.png";
+    sprite->name.s() = "image.png";
     
     game.start();
     
