@@ -22,7 +22,7 @@ add_executable(Server
 
 # Добавляем необходимые библиотеки, если нужно
 # if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
-#        target_link_libraries(Server thr)
+        target_link_libraries(Server thr)
 # endif()
 
 # Указываем директорию для собранных бинарных файлов

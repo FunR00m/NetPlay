@@ -90,19 +90,31 @@ void InetNetworker::talk_loop()
 {
     while(m_running)
     {
-        PackedData snapshot = read_data(m_socket);
+	// Объявляем буфер для принятых или отправляемых пакетов
+	PackedData snapshot;
+
+	// Получаем пакет с сервера
+        snapshot = read_data(m_socket);
+
+	// Проверяем, содержит ли пакет данные
         if(snapshot.get_size() == 0)
         {
+	    debug("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
             m_running = false;
             break;
         }
 
+	// Добавляем пакет в список непрочитанных пакетов
         m_snapshots_mtx.lock();
-        // debug("SNAPSHOT");
         m_snapshots.push(snapshot);
         m_snapshots_mtx.unlock();
 
+	/* Ждём пока появятся ответы в списке ответов
+	 * FIXME Изменить реализацию с помощью std::condition_variable
+	 */
         while(m_responses_size == 0);
+
+	// Копируем ответ в буфер
         m_responses_mtx.lock();
         if(m_responses.size() > 0)
         {
@@ -112,8 +124,12 @@ void InetNetworker::talk_loop()
         }
         m_responses_mtx.unlock();
 
+	// Отправляем ответ
         send_data(m_socket, snapshot);
     }
+
+    // Закрываем сокет после завершения цикла
+    close(m_socket);
 }
 
 void InetNetworker::send_data(int socket, PackedData data)
@@ -128,29 +144,43 @@ void InetNetworker::send_data(int socket, PackedData data)
     const int buffer_size = BUFFER_SIZE;
     for(long long i = 0; i + buffer_size < length; i += buffer_size)
     {
+	// Последовательно отправляем куски данных размером buffer_size
         write(socket, raw_data + i, buffer_size);
     }
+    // Отправляем оставшиеся данные
     write(socket, raw_data + length / buffer_size * buffer_size, length % buffer_size);
 }
 
 PackedData InetNetworker::read_data(int socket)
 {
     DataSize length;
+
+    // Принимаем размер читаемых данных
     if(read(socket, &length, sizeof(length)) == 0)
     {
         return PackedData();
     }
 
     const int buffer_size = BUFFER_SIZE;
+
+    // Выделяем память для принятых данных
     char *raw_data = (char*) malloc(length);
     
     for(long long i = 0; i + buffer_size < length; i+= buffer_size)
     {
+	// Читаем кусок данных длиной buffer_size и добавляем его raw_data
         read(socket, raw_data + i, buffer_size);
     }
+    // Читаем оставшиеся данные
     read(socket, raw_data + length / buffer_size * buffer_size, length % buffer_size);
     
+    // Создаём пакет из сырых данных
     PackedData data(raw_data, length);
+
+    /* Освобождаем выделенную память
+     * XXX После планируемой оптимизации PackedData освобождение памяти 
+     * будет лишним.
+     */
     free(raw_data);
     return data;
 }

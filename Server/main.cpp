@@ -21,6 +21,31 @@
 
 using namespace engine;
 
+class TestSystem : public ISystem
+{
+public:
+	void start(GameManager *game_manager)
+	{
+		m_game = game_manager;
+	}
+
+	void tick()
+	{
+		auto obj = m_game->get_root()->get_child("Box");
+		std::shared_ptr<Transform> transform = obj->get_component<Transform>();
+		if(transform->pos.x >= 200)
+		{
+			transform->motion.x = -5;
+		} else if(transform->pos.x <= 90)
+		{
+			transform->motion.x = 5;
+		}
+	}
+
+private:
+	GameManager *m_game;
+};
+
 void move_listener(Vec2Field pos)
 {
     // std::cout << "MOVE EVENT: " << pos.x << ' ' << pos.y << '\n';
@@ -32,6 +57,7 @@ int game_test()
     
     std::shared_ptr<MoveSystem> move_system = std::make_shared<MoveSystem>();
     game.add_system(move_system);
+    game.add_system(std::make_shared<TestSystem>());
     
     game.get_root()->set_name("Root");
 

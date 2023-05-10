@@ -17,12 +17,17 @@ namespace engine
 
 GameManager::GameManager()
 {
+    // Создаём корневой объект
     m_root = std::make_shared<Object>(0, nullptr, this);
     m_id_to_object[0] = m_root;
     m_objects.push_back(m_root);
     
+    // Устанавливаем максимальный использованный уникальный номер
     m_max_id = 0;
 
+    /* Создаём экземпляр сетевого модуля
+     * FIXME Изменить тип m_networker на std::unique_ptr
+     */
     m_networker = std::make_shared<sys::InetNetworker>();
     
     m_running = false;
@@ -35,16 +40,28 @@ std::shared_ptr<Object> GameManager::get_root()
 
 std::shared_ptr<Object> GameManager::add_object(long long parent_id)
 {
+    // Проверяем, существует ли запрошенный родительский объект
     if(m_id_to_object.find(parent_id) == m_id_to_object.end())
     {
         error("[GameManager::add_object(" + std::to_string(parent_id) + ")] Object with given parent ID does not exist.");
         return nullptr;
     }
+
+    // Находим родительский объект
+    std::shared_ptr<Object> parent = m_id_to_object[parent_id];
+
+    // Изменияем максимальный уникальный номер
     m_max_id += 1;
-    auto new_object = std::make_shared<Object>(m_max_id, m_id_to_object[parent_id], this);
+
+    // Создаём экземпляр объекта
+    auto new_object = std::make_shared<Object>(m_max_id, parent, this);
+
+    // Добавляем объект в индекс
     m_id_to_object[m_max_id] = new_object;
-    m_id_to_object[parent_id]->add_child(new_object);
     m_objects.push_back(new_object);
+
+    // Добавляем объект в индекс родительского объекта
+    parent->add_child(new_object);
     
     return new_object;
 }
@@ -84,6 +101,7 @@ void GameManager::add_system(std::shared_ptr<ISystem> system)
 
 void GameManager::start()
 {
+    // Запускаем все системы
     for(std::shared_ptr<ISystem> system : m_systems)
     {
         system->start(this);
@@ -98,11 +116,12 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         for(std::shared_ptr<ISystem> system : m_systems)
         {
             system->tick();
         }
+
         m_networker->send_snapshot(pack());
     }
 }
@@ -110,7 +129,11 @@ void GameManager::game_loop()
 PackedData GameManager::pack()
 {
     PackedData data;
+
+    // Добавляем количество последующих объектов
     data += IntField(m_objects.size()).pack();
+
+    // Добавляем упакованные данные всех объектов
     for(auto object : m_objects)
     {
         data += object->pack();
