@@ -116,7 +116,7 @@ private:
     /// Массив всех систем
     std::vector<std::shared_ptr<ISystem>> m_systems;
     
-    std::shared_ptr<INetworker> m_networker;
+    std::unique_ptr<INetworker> m_networker;
 
     std::shared_ptr<ComponentManager> m_component_manager;
     

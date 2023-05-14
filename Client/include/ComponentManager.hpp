@@ -5,8 +5,8 @@
 #include "IComponent.hpp"
 #include "utils/debug.hpp"
 
-#ifndef ComponentManager_hpp
-#define ComponentManager_hpp
+#ifndef COMPONENTMANAGER_HPP
+#define COMPONENTMANAGER_HPP
 
 namespace engine
 {

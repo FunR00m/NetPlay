@@ -82,10 +82,7 @@ void InetNetworker::stop()
 }
 
 void InetNetworker::send_snapshot(PackedData snapshot)
-{
-    // Увеличиваем счётчик отправляемых пакетов
-    m_max_snapshot_id++;
-    
+{ 
     // Записываем новый пакет в индекс
     m_snapshot_to_data_mtx.lock();
     
@@ -93,6 +90,9 @@ void InetNetworker::send_snapshot(PackedData snapshot)
     m_snapshot_to_data[m_max_snapshot_id].second = snapshot;
     
     m_snapshot_to_data_mtx.unlock();
+
+    // Увеличиваем счётчик отправляемых пакетов
+    m_max_snapshot_id += 1;
 }
 
 PackedData InetNetworker::get_data(long long client_id)
@@ -128,18 +128,18 @@ void InetNetworker::listen_thread()
         sockaddr_in client_addr;
         socklen_t client_len;
 
-	// Принимаем подключение
+        // Принимаем подключение
         int client_socket = accept(m_listen_socket, (sockaddr*)&client_addr, &client_len);
         
-	// Увеличиваем счётчик номеров клиентов
+        // Увеличиваем счётчик номеров клиентов
         m_max_client_id += 1;
         
         m_clients_mtx.lock();
 
-	// Добавляем клиента в список клиентов
+        // Добавляем клиента в список клиентов
         m_clients.push_back({ m_max_client_id });
 
-	// Запускаем поток для нового клиента
+        // Запускаем поток для нового клиента
         m_id_to_thread[m_max_client_id] = std::make_shared<std::thread>(&InetNetworker::client_thread, this, client_socket, m_clients.back());
 
         m_clients_mtx.unlock();
@@ -154,53 +154,53 @@ void InetNetworker::client_thread(int socket, Client client)
     unsigned long long last_sent_snapshot_id = m_max_snapshot_id;
     while(m_running)
     {
-	// Ждём появления пакетов для отправки
+        // Ждём появления пакетов для отправки
         while(last_sent_snapshot_id == m_max_snapshot_id);
 
-	// Копируем пакет из индекса
+        // Копируем пакет из индекса
         m_snapshot_to_data_mtx.lock();
         PackedData snapshot_data = m_snapshot_to_data[last_sent_snapshot_id + 1].second;
         m_snapshot_to_data_mtx.unlock();
         
-	// Отправляем пакет
+        // Отправляем пакет
         send_data(socket, snapshot_data);
         
         m_snapshot_to_data_mtx.lock();
 
-	// Читаем счётчик клиентов, которые получили данный пакет
-	auto &ready_count = m_snapshot_to_data[last_sent_snapshot_id + 1].first;
+        // Читаем счётчик клиентов, которые получили данный пакет
+        auto &ready_count = m_snapshot_to_data[last_sent_snapshot_id + 1].first;
 
-	// Уменьшаем счётчик
-	ready_count -= 1;
+        // Уменьшаем счётчик
+        ready_count -= 1;
 
-	// Проверяем, остались ли клиенты, не получившие пакет
+        // Проверяем, остались ли клиенты, не получившие пакет
         if(ready_count == 0)
         {
-	    // Если пакет больше не нужен, удаляем его.
+            // Если пакет больше не нужен, удаляем его.
             m_snapshot_to_data.erase(last_sent_snapshot_id + 1);
         }
 
         m_snapshot_to_data_mtx.unlock();
         
-	// Увеличиваем номер последнего отправленного пакета
+        // Увеличиваем номер последнего отправленного пакета
         last_sent_snapshot_id += 1;
 
-	// Получаем ответ клиента
+        // Получаем ответ клиента
         PackedData data = read_data(socket);
 
-	/* Проверяем, отключился ли клиент
-	 * FIXME Изменить признак отключения клиента. Он может отправить действительный
-	 * пакет нулевой длины, не отключаясь.
-	 */
+        /* Проверяем, отключился ли клиент
+        * FIXME Изменить признак отключения клиента. Он может отправить действительный
+        * пакет нулевой длины, не отключаясь.
+        */
         if(data.get_size() == 0)
         {
-	    // Закрываем соединение
+            // Закрываем соединение
             close(socket);
             remove_client(client.id);
             return;
         }
 
-	// Записываем полученный ответ в соответствующую ячейку индекса
+        // Записываем полученный ответ в соответствующую ячейку индекса
         m_id_to_data_mtx.lock();
         m_id_to_data[client.id] = data;
         m_id_to_data_mtx.unlock();
@@ -219,29 +219,43 @@ void InetNetworker::send_data(int socket, PackedData data)
     const int buffer_size = BUFFER_SIZE;
     for(long long i = 0; i + buffer_size < length; i += buffer_size)
     {
+	// Последовательно отправляем куски данных размером buffer_size
         write(socket, raw_data + i, buffer_size);
     }
+    // Отправляем оставшиеся данные
     write(socket, raw_data + length / buffer_size * buffer_size, length % buffer_size);
 }
 
 PackedData InetNetworker::read_data(int socket)
 {
     DataSize length;
+
+    // Принимаем размер читаемых данных
     if(read(socket, &length, sizeof(length)) == 0)
     {
         return PackedData();
     }
 
     const int buffer_size = BUFFER_SIZE;
+
+    // Выделяем память для принятых данных
     char *raw_data = (char*) malloc(length);
     
     for(long long i = 0; i + buffer_size < length; i+= buffer_size)
     {
+	// Читаем кусок данных длиной buffer_size и добавляем его raw_data
         read(socket, raw_data + i, buffer_size);
     }
+    // Читаем оставшиеся данные
     read(socket, raw_data + length / buffer_size * buffer_size, length % buffer_size);
     
+    // Создаём пакет из сырых данных
     PackedData data(raw_data, length);
+
+    /* Освобождаем выделенную память
+     * XXX После планируемой оптимизации PackedData освобождение памяти 
+     * будет лишним.
+     */
     free(raw_data);
     return data;
 }

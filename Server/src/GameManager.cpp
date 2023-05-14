@@ -25,9 +25,7 @@ GameManager::GameManager()
     // Устанавливаем максимальный использованный уникальный номер
     m_max_id = 0;
 
-    /* Создаём экземпляр сетевого модуля
-     * FIXME Изменить тип m_networker на std::unique_ptr
-     */
+    // Создаём экземпляр сетевого модуля
     m_networker = std::make_shared<sys::InetNetworker>();
     
     m_running = false;

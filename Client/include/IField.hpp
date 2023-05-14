@@ -16,8 +16,8 @@
 //  ==========================================================  //
 //                                                              //
 
-#ifndef IField_h
-#define IField_h
+#ifndef IFIELD_HPP
+#define IFIELD_HPP
 
 #include "PackedData.hpp"
 

@@ -90,31 +90,31 @@ void InetNetworker::talk_loop()
 {
     while(m_running)
     {
-	// Объявляем буфер для принятых или отправляемых пакетов
-	PackedData snapshot;
+        // Объявляем буфер для принятых или отправляемых пакетов
+        PackedData snapshot;
 
-	// Получаем пакет с сервера
+        // Получаем пакет с сервера
         snapshot = read_data(m_socket);
 
-	// Проверяем, содержит ли пакет данные
+        // Проверяем, содержит ли пакет данные
         if(snapshot.get_size() == 0)
         {
-	    debug("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
+            debug("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
             m_running = false;
             break;
         }
 
-	// Добавляем пакет в список непрочитанных пакетов
+        // Добавляем пакет в список непрочитанных пакетов
         m_snapshots_mtx.lock();
         m_snapshots.push(snapshot);
         m_snapshots_mtx.unlock();
 
-	/* Ждём пока появятся ответы в списке ответов
-	 * FIXME Изменить реализацию с помощью std::condition_variable
-	 */
+        // Ждём пока появятся ответы в списке ответов
+        // FIXME Изменить реализацию с помощью std::condition_variable
+        // 
         while(m_responses_size == 0);
 
-	// Копируем ответ в буфер
+        // Копируем ответ в буфер
         m_responses_mtx.lock();
         if(m_responses.size() > 0)
         {
@@ -124,7 +124,7 @@ void InetNetworker::talk_loop()
         }
         m_responses_mtx.unlock();
 
-	// Отправляем ответ
+        // Отправляем ответ
         send_data(m_socket, snapshot);
     }
 
@@ -177,10 +177,9 @@ PackedData InetNetworker::read_data(int socket)
     // Создаём пакет из сырых данных
     PackedData data(raw_data, length);
 
-    /* Освобождаем выделенную память
-     * XXX После планируемой оптимизации PackedData освобождение памяти 
-     * будет лишним.
-     */
+    // Освобождаем выделенную память
+    // XXX После планируемой оптимизации PackedData освобождение памяти 
+    // будет лишним.
     free(raw_data);
     return data;
 }

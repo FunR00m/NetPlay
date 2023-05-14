@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 # Добавляем папку include в пути поиска заголовочных файлов
 include_directories(include)
 
-include_directories(/usr/local/include)
+# include_directories(/usr/local/include)
+include_directories(third-party/include)
 
 # Добавляем исходные файлы проекта
 add_executable(Client
@@ -23,14 +24,16 @@ add_executable(Client
         src/sys/TextureSDL.cpp
         src/sys/RendererSDL.cpp
         src/ComponentManager.cpp
+        src/Controller.cpp
 )
 
 # Добавляем необходимые библиотеки, если нужно
 # if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
-        target_link_libraries(Client thr)
+#        target_link_libraries(Client thr)
 # endif()
 
-target_link_directories(Client PUBLIC /usr/local/lib)
+# target_link_directories(Client PUBLIC /usr/local/lib)
+target_link_directories(Client PUBLIC third-party/lib)
 target_link_libraries(Client SDL2 SDL2_image)
 
 configure_file(${CMAKE_SOURCE_DIR}/image.png ${CMAKE_BINARY_DIR}/image.png COPYONLY)

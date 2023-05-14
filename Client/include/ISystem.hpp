@@ -5,8 +5,8 @@
 //  Created by Fedor Fedor on 07.04.2023.
 //
 
-#ifndef ISystem_hpp
-#define ISystem_hpp
+#ifndef ISYSTEM_HPP
+#define ISYSTEM_HPP
 
 namespace engine
 {

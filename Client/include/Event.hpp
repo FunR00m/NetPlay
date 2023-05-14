@@ -5,8 +5,8 @@
 //  Created by Fedor Fedor on 12.04.2023.
 //
 
-#ifndef Event_hpp
-#define Event_hpp
+#ifndef EVENT_HPP
+#define EVENT_HPP
 
 #include <vector>
 #include <functional>

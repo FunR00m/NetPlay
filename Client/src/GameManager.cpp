@@ -17,13 +17,18 @@ namespace engine
 
 GameManager::GameManager()
 {
+    // Создаём корневой объект
     m_root = std::make_shared<Object>(0, -1, this);
     m_id_to_object[0] = m_root;
     m_objects.push_back(m_root);
     
+    // Устанавливаем максимальный использованный уникальный номер
     m_max_id = 0;
 
-    m_networker = std::make_shared<sys::InetNetworker>();
+    // Создаём экземпляр сетевого модуля
+    m_networker = std::make_unique<sys::InetNetworker>();
+
+    // Создаём экземпляр менеджера компонентов
     m_component_manager = std::make_shared<ComponentManager>();
     
     m_running = false;
