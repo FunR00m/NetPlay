@@ -83,6 +83,9 @@ void InetNetworker::stop()
 
 void InetNetworker::send_snapshot(PackedData snapshot)
 { 
+    // Увеличиваем счётчик отправляемых пакетов
+    m_max_snapshot_id += 1;
+
     // Записываем новый пакет в индекс
     m_snapshot_to_data_mtx.lock();
     
@@ -90,9 +93,6 @@ void InetNetworker::send_snapshot(PackedData snapshot)
     m_snapshot_to_data[m_max_snapshot_id].second = snapshot;
     
     m_snapshot_to_data_mtx.unlock();
-
-    // Увеличиваем счётчик отправляемых пакетов
-    m_max_snapshot_id += 1;
 }
 
 PackedData InetNetworker::get_data(long long client_id)

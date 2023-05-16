@@ -22,48 +22,24 @@ void RendererSDL::setup()
     renderer_ = SDL_CreateRenderer(window_, -1, 0);
 }
 
-// std::vector<Event> RendererSDL::poll_events()
-// {
-//     std::vector<Event> events;
-//     SDL_Event sdl_event;
-//     while(SDL_PollEvent(&sdl_event))
-//     {
-//         Event event;
-//         switch(sdl_event.type)
-//         {
-//             case SDL_MOUSEBUTTONDOWN:
-//                 event.type = Event::MouseDown;
-//                 event.pos= { sdl_event.motion.x, sdl_event.motion.y };
-//                 break;
-//             case SDL_MOUSEBUTTONUP:
-//                 event.type = Event::MouseUp;
-//                 event.pos= { sdl_event.motion.x, sdl_event.motion.y };
-//                 break;
-//             case SDL_MOUSEMOTION:
-//                 event.type = Event::MouseMove;
-//                 event.pos = { sdl_event.motion.x, sdl_event.motion.y };
-//                 break;
-//             case SDL_KEYDOWN:
-//                 fixme("core::sys::RendererSDL::poll_events() SDL_KEYDOWN event has not been implemented yet.");
-//                 break;
-//             case SDL_KEYUP:
-//                 fixme("core::sys::RendererSDL::poll_events() SDL_KEYUP event has not been implemented yet.");
-//                 break;
-//             case SDL_MOUSEWHEEL:
-//                 fixme("core::sys::RendererSDL::poll_events() SDL_MOUSEWHEEL event has not been implemented yet.");
-//                 break;
-//             case SDL_QUIT:
-//                 event.type = Event::GameQuit;
-//                 break;
-//         }
-//         events.push_back(event);
-//     }
-//     return events;
-// }
-
-void RendererSDL::invoke_events()
+void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
 {
-    fixme("[sys::RendererSDL::invoke_events] stub");
+    SDL_Event sdl_event;
+    while(SDL_PollEvent(&sdl_event))
+    {
+        switch(sdl_event.type)
+        {
+            case SDL_KEYDOWN:
+                controller->press(static_cast<Controller::Key>(sdl_event.key.type));
+                break;
+            case SDL_KEYUP:
+                controller->release(static_cast<Controller::Key>(sdl_event.key.type));
+                break;
+            case SDL_QUIT:
+                fixme("core::sys::RendererSDL::poll_events() SDL_QUIT event has not been implemented yet.");
+                break;
+        }
+    }
 }
 
 void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
@@ -95,17 +71,6 @@ void RendererSDL::refresh()
 {
     SDL_RenderPresent(renderer_);
     SDL_RenderClear(renderer_);
-    
-    SDL_Event event;
-    while(SDL_PollEvent(&event))
-    {
-        if(event.type == SDL_QUIT)
-        {
-            debug("Stopping!");
-            stop();
-            break;
-        }
-    }
 }
 
 void RendererSDL::stop()

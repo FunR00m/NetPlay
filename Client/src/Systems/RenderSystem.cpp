@@ -33,6 +33,7 @@ void RenderSystem::tick()
         m_renderer.render_sprite(sprite);
     }
     m_renderer.refresh();
+    m_renderer.handle_events(m_game->get_controller());
 }
 
 void RenderSystem::load_texture(std::string name)

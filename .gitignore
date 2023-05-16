@@ -1,4 +1,5 @@
 .vscode
+.DS_Store
 Server/.vscode
 Server/build
 Client/.vscode

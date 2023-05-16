@@ -30,6 +30,9 @@ GameManager::GameManager()
 
     // Создаём экземпляр менеджера компонентов
     m_component_manager = std::make_shared<ComponentManager>();
+
+    // Создаём экземпляр контроллера
+    m_controller = std::make_shared<Controller>();
     
     m_running = false;
 }
@@ -121,7 +124,9 @@ void GameManager::game_loop()
             system->tick();
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        m_networker->send_response(PackedData((void*)"1", 1));
+
+        m_networker->send_response(create_response());
+        // m_networker->send_response(PackedData((void*)"1", 1));
     }
 }
 
@@ -143,6 +148,13 @@ void GameManager::unpack(PackedData data)
     }
 }
 
+PackedData GameManager::create_response()
+{
+    PackedData data;
+    data += m_controller->fetch_changes();
+    return data;
+}
+
 std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 {
     return m_component_manager->create(name);
@@ -151,6 +163,11 @@ std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 std::string GameManager::get_component_type_name(std::string component_name)
 {
     return m_component_manager->get_type_name(component_name);
+}
+
+std::shared_ptr<Controller> GameManager::get_controller()
+{
+    return m_controller;
 }
 
 }

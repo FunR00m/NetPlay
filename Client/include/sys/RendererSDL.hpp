@@ -25,8 +25,8 @@ public:
     /// Sets the renderer up, for example creates the window.
     void setup() override;
     
-    /// Returns system events such as key presses or mouse clicks.
-    void invoke_events() override;
+    /// Handles system events such as key presses or mouse clicks.
+    void handle_events(std::shared_ptr<Controller> controller) override;
     
     /// Renders the given sprite.
     virtual void render_sprite(std::shared_ptr<Sprite> sprite) override;
