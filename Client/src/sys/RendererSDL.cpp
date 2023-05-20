@@ -30,10 +30,10 @@ void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
         switch(sdl_event.type)
         {
             case SDL_KEYDOWN:
-                controller->press(static_cast<Controller::Key>(sdl_event.key.type));
+                controller->press(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
                 break;
             case SDL_KEYUP:
-                controller->release(static_cast<Controller::Key>(sdl_event.key.type));
+                controller->release(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
                 break;
             case SDL_QUIT:
                 fixme("core::sys::RendererSDL::poll_events() SDL_QUIT event has not been implemented yet.");

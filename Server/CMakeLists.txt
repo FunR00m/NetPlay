@@ -18,6 +18,7 @@ add_executable(Server
         src/Components/Transform.cpp
         src/Components/Sprite.cpp
         src/Systems/MoveSystem.cpp
+        src/Controller.cpp
 )
 
 # Добавляем необходимые библиотеки, если нужно

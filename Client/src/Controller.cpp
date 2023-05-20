@@ -12,8 +12,8 @@ Controller::Controller()
 
 void Controller::set_state(Key key, bool state)
 {
-    key_states[key] = state;
-    changed_keys.push_back(key);
+    m_key_states[key] = state;
+    m_changed_keys.push_back(key);
 }
 
 void Controller::press(Key key)
@@ -28,18 +28,18 @@ void Controller::release(Key key)
 
 bool Controller::get_state(Key key)
 {
-    if(key_states.find(key) == key_states.end())
+    if(m_key_states.find(key) == m_key_states.end())
     {
-        key_states[key] = false;
+        m_key_states[key] = false;
     }
 
-    return key_states[key];
+    return m_key_states[key];
 }
 
 PackedData Controller::pack()
 {
     // XXX Пока не реализовано из-за отсутствия полного списка клавиш
-    // в словаре состояний key_states.
+    // в словаре состояний m_key_states.
     fixme("[Controller::pack] stub");
     return fetch_changes();
 }
@@ -49,21 +49,21 @@ PackedData Controller::fetch_changes()
     PackedData data;
     
     // Добавляем количество изменённых клавиш
-    data += IntField(changed_keys.size()).pack();
+    data += IntField(m_changed_keys.size()).pack();
 
     // Добавляем информацию о каждой изменённой клавише
-    for(Key key : changed_keys)
+    for(Key key : m_changed_keys)
     {
         // Номер клавишы
         data += IntField(key).pack();
 
         // Состояние клавишы. bool автоматически будет переведён в 0
         // или 1.
-        data += IntField(key_states[key]).pack();
+        data += IntField(m_key_states[key]).pack();
     }
 
     // Очищаем список измененённых клавиш
-    changed_keys.clear();
+    m_changed_keys.clear();
 
     return data;
 }

@@ -33,6 +33,7 @@
 #include "ISystem.hpp"
 #include "INetworker.hpp"
 #include "ComponentManager.hpp"
+#include "Controller.hpp"
 
 namespace engine
 {
@@ -88,6 +89,13 @@ public:
     void start();
 
     std::shared_ptr<IComponent> create_component(std::string name);
+
+    /// @param client_id Номер клиента
+    /// @return Указатель на его контроллер
+    std::shared_ptr<Controller> get_controller(long long client_id);
+
+    /// @return Список подключенных клиентов
+    std::vector<Client> get_clients();
     
 private:
     /// Словарь вида *номер объекта-объект*
@@ -111,11 +119,16 @@ private:
     std::shared_ptr<INetworker> m_networker;
 
     std::shared_ptr<ComponentManager> m_component_manager;
+
+    /// @brief Словарь вида номер клиента - указатель на его контроллер.
+    std::map<long long, std::shared_ptr<Controller>> m_controllers;
     
     /// Функция главного игрового цикла.
     void game_loop();
 
     PackedData pack();
+
+    void read_responses();
 };
 
 }

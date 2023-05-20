@@ -115,6 +115,7 @@ void GameManager::game_loop()
     while(m_running)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        read_responses();
         for(std::shared_ptr<ISystem> system : m_systems)
         {
             system->tick();
@@ -143,6 +144,42 @@ PackedData GameManager::pack()
 std::shared_ptr<IComponent> GameManager::create_component(std::string name)
 {
     return m_component_manager->create(name);
+}
+
+std::vector<Client> GameManager::get_clients()
+{
+    return m_networker->get_clients();
+}
+
+std::shared_ptr<Controller> GameManager::get_controller(long long client_id)
+{
+    if(m_controllers.find(client_id) == m_controllers.end())
+    {
+        error(std::string("[GameManager::get_controller] Unable to find controller for client ")
+        + std::to_string(client_id) + ".");
+        return nullptr;
+    }
+
+    return m_controllers[client_id];
+}
+
+void GameManager::read_responses()
+{
+    std::vector<Client> clients = m_networker->get_clients();
+
+    for(Client client : clients)
+    {
+        if(m_controllers.find(client.id) == m_controllers.end())
+        {
+            m_controllers[client.id] = std::make_shared<Controller>();
+        }
+        
+        PackedData data = m_networker->get_data(client.id);
+        if(data.get_size() > 0)
+        {
+            m_controllers[client.id]->apply_changes(data.take());
+        }
+    }
 }
 
 }

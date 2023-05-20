@@ -31,15 +31,38 @@ public:
 
 	void tick()
 	{
-		auto obj = m_game->get_root()->get_child("Box");
-		std::shared_ptr<Transform> transform = obj->get_component<Transform>();
-		if(transform->pos.x >= 200)
-		{
-			transform->motion.x = -5;
-		} else if(transform->pos.x <= 90)
-		{
-			transform->motion.x = 5;
-		}
+        std::vector<Client> clients = m_game->get_clients();
+        if(clients.size() < 2)
+        {
+            return;
+        }
+
+        for(int i = 0; i < 2; i++)
+        {
+            auto obj = m_game->get_root()->get_child("Player_" + std::to_string(i));
+            std::shared_ptr<Transform> transform = obj->get_component<Transform>();
+
+            std::shared_ptr<Controller> controller = m_game->get_controller(clients[i].id);
+            if(controller->get_state('w'))
+            {
+                transform->motion.y = -5;
+            } else if(controller->get_state('s'))
+            {
+                transform->motion.y = 5;
+            } else {
+                transform->motion.y = 0;
+            }
+
+            if(controller->get_state('a'))
+            {
+                transform->motion.x = -5;
+            } else if(controller->get_state('d'))
+            {
+                transform->motion.x = 5;
+            } else {
+                transform->motion.x = 0;
+            }
+        }
 	}
 
 private:
@@ -61,19 +84,21 @@ int game_test()
     
     game.get_root()->set_name("Root");
 
-    auto box = game.add_object("Box");
+    for(int i = 0; i < 2; i++)
+    {
+        auto box = game.add_object("Player_" + std::to_string(i));
 
-    auto box_transform = box->add_component<Transform>();
-    box_transform->move_event += move_listener; 
-    box_transform->pos.x = 90;
-    box_transform->pos.y = 90;
-    box_transform->motion.x = 5;
+        auto box_transform = box->add_component<Transform>();
+        box_transform->move_event += move_listener; 
+        box_transform->pos.x = 90 * (i + 1);
+        box_transform->pos.y = 90;
 
-    auto sprite = box->add_component<Sprite>();
-    sprite->pos = box_transform->pos;
-    sprite->size.x = 200;
-    sprite->size.y = 200;
-    sprite->name.s() = "image.png";
+        auto sprite = box->add_component<Sprite>();
+        sprite->pos = box_transform->pos;
+        sprite->size.x = 200;
+        sprite->size.y = 200;
+        sprite->name.s() = "image.png";
+    }
     
     game.start();
     

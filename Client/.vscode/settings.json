@@ -77,6 +77,7 @@
         "numeric": "cpp",
         "random": "cpp",
         "utility": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "__memory": "cpp"
     }
 }
