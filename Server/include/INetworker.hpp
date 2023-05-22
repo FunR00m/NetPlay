@@ -44,7 +44,7 @@ public:
     /// @brief Возвращает последний принятый ответ данного клиента
     /// @param client_id Номер клиента
     /// @return Упакованные данные ответа
-    virtual PackedData get_data(long long client_id) = 0;
+    virtual PackedData get_response(long long client_id) = 0;
     
     /// @return Список подключенных клиентов
     virtual std::vector<Client> get_clients() = 0;

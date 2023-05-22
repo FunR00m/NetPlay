@@ -165,7 +165,7 @@ void Object::unpack(PackedData data)
 
     for(int i = 0; i < component_count; i++)
     {
-        const char *component_name = data.take().get_data().data();
+        const char *component_name = data.take().data();
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         component->unpack(data.take());
         m_components[component_name] = component;

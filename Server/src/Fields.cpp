@@ -45,19 +45,19 @@ PackedData IntField::fetch_changes()
 
 void IntField::unpack(PackedData data)
 {
-    if(data.get_size() != sizeof(m_number))
+    if(data.size() != sizeof(m_number))
     {
         error("[IntField::unpack] Unable to unpack the data.");
     }
-    m_number = *(int*) data.get_data().data();
+    m_number = *(int*) data.data();
 }
 
 void IntField::apply_changes(PackedData data)
 {
-    if(data.get_size() == 0)
+    if(data.size() == 0)
     {
         return;
-    } else if(data.get_size() == sizeof(m_number))
+    } else if(data.size() == sizeof(m_number))
     {
         unpack(data);
     } else {
@@ -155,7 +155,7 @@ PackedData StringField::fetch_changes()
 
 void StringField::unpack(PackedData data)
 {
-    m_string = data.get_data().data();
+    m_string = std::string(data.data(), data.size());
 }
 
 void StringField::apply_changes(PackedData data)

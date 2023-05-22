@@ -97,7 +97,7 @@ void InetNetworker::talk_loop()
         snapshot = read_data(m_socket);
 
         // Проверяем, содержит ли пакет данные
-        if(snapshot.get_size() == 0)
+        if(snapshot.size() == 0)
         {
             debug("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
             m_running = false;
@@ -126,6 +126,9 @@ void InetNetworker::talk_loop()
 
         // Отправляем ответ
         send_data(m_socket, snapshot);
+
+        // Удаляем данные ответа
+        snapshot.clear();
     }
 
     // Закрываем сокет после завершения цикла
@@ -134,8 +137,8 @@ void InetNetworker::talk_loop()
 
 void InetNetworker::send_data(int socket, PackedData data)
 {
-    char *raw_data = data.get_data().data();
-    DataSize length = data.get_size();
+    char *raw_data = data.data();
+    DataSize length = data.size();
     
     // Отправка длины сообщения
     write(socket, &length, sizeof(length));
@@ -174,12 +177,10 @@ PackedData InetNetworker::read_data(int socket)
     // Читаем оставшиеся данные
     read(socket, raw_data + length / buffer_size * buffer_size, length % buffer_size);
     
-    // Создаём пакет из сырых данных
+    // Создаём пакет из сырых данных. Эти данные будут скопированы.
     PackedData data(raw_data, length);
 
     // Освобождаем выделенную память
-    // XXX После планируемой оптимизации PackedData освобождение памяти 
-    // будет лишним.
     free(raw_data);
     return data;
 }

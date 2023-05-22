@@ -4,7 +4,7 @@
 //  | Файл: PackedData.hpp                                   |  //
 //  | Автор: Fedor Buben <bubenfedor0@gmail.com>             |  //
 //  | Дата создания: 02.04.2023                              |  //
-//  | Дата изменения: 09.05.2023                             |  //
+//  | Дата изменения: 22.05.2023                             |  //
 //  | Описание: Последовательность байт, готовая к передаче. |  //
 //  |--------------------------------------------------------|  //
 //  | ПОДРОБНОЕ ОПИСАНИЕ                                     |  //
@@ -17,12 +17,13 @@
 //  ==========================================================  //
 //                                                              //
 
-#ifndef PackedData_hpp
-#define PackedData_hpp
+#ifndef PACKEDDATA_HPP
+#define PACKEDDATA_HPP
 
 #include <vector>
 #include <string>
 #include <memory>
+#include <map>
 
 namespace engine
 {
@@ -32,49 +33,59 @@ using DataSize = unsigned long long;
 class PackedData
 {
 public:
-    PackedData();
-    
-    PackedData(std::vector<char> &data);
-    
-    PackedData(void* object, DataSize size);
-    
-    ~PackedData();
-    
-    /// Добавляет данные другого объекта PackedData.
-    ///
-    /// - Parameter new_data: Объект, данные которого нужно добавить
-    ///
-    void operator += (PackedData new_data);
-    
-    /// Добавляет символы данной строки к данным.
-    ///
-    /// - Parameter new_data: Строка, которую нужно добавить
-    ///
-    void operator += (std::string new_data);
+        /// @brief Конструирует объект без начальных данных
+        PackedData();
 
-    /// Удаляет первый упакованный пакет данных и возвращает его.
-    PackedData take();
-    
-    /// Возвращает размер хранимых данных.
-    DataSize get_size();
-    
-    /// Возвращает размер хранимых данных вместе с размером переменной, указывающей на их размер.
-    DataSize get_full_size();
-    
-    /// Возвращает хранимые данные.
-    std::vector<char>& get_data();
-    
-    /// Возвращает хранимые данные с их размером вначале.
-    std::vector<char> get_full_data();
+        /// @brief Конструирует объект, не копируя данные. При этом
+        /// добавить новые данные будет нельзя.
+        /// @param data Начальные данные
+        /// @param alloc_data Начало выделенной памяти
+        /// @param size Размер начальных данных
+        PackedData(char* data, char* alloc_data, DataSize size);
+
+        /// @brief Конструирует объект, копируя данные
+        /// @param data Начальные данные
+        /// @param size Размер данных
+        PackedData(void* data, DataSize size);
+
+        /// @brief Добавляет данные другого объекта PackedData.
+        /// Происходит копирование.
+        /// @param other Объект, данные которого нужно добавить
+        void operator += (PackedData other);
+
+        /// @brief Добавляет символы данной строки к данным.
+        /// Происходит копирование. Заключающий ноль учитывается!
+        /// @param string Строка, которую нужно добавить
+        void operator += (std::string string);
+
+        /// @brief Возвращает следующий пакет упакованных данных.
+        /// @return Пакет упакованных данных.
+        PackedData take();
+
+        /// @return Указатель на хранимые данные
+        char* data();
+
+        /// @return Указатель на начало хранимых данных
+        char* alloc_data();
+
+        /// @return Размер хранимых данных
+        DataSize size();
+
+        /// @return Размер выделенной памяти
+        DataSize alloc_size();
+
+        /// @brief Очищает выделенные данные. Другие параметры при этом
+        /// не меняются.
+        void clear();
 
 private:
-    /// Хранимые данные
-    std::vector<char> m_data;
-    
-    /// Размер хранимых данных
-    DataSize m_size;
+        char* m_data;
+        char* m_alloc_data;
+
+        DataSize m_size;
+        DataSize m_alloc_size;
 };
 
 }
 
-#endif /* PackedData_hpp */
+#endif

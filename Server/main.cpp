@@ -32,12 +32,8 @@ public:
 	void tick()
 	{
         std::vector<Client> clients = m_game->get_clients();
-        if(clients.size() < 2)
-        {
-            return;
-        }
 
-        for(int i = 0; i < 2; i++)
+        for(int i = 0; i < clients.size(); i++)
         {
             auto obj = m_game->get_root()->get_child("Player_" + std::to_string(i));
             std::shared_ptr<Transform> transform = obj->get_component<Transform>();
@@ -127,7 +123,7 @@ int network_test()
     for(int i = 0; i < 100; i++)
     {
 	    std::this_thread::sleep_for(std::chrono::milliseconds(5500));
-	    std::cout << data.get_size() << std::endl;
+	    std::cout << data.size() << std::endl;
 	    networker.send_snapshot(data);
     }
     

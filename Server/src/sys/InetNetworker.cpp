@@ -95,7 +95,7 @@ void InetNetworker::send_snapshot(PackedData snapshot)
     m_snapshot_to_data_mtx.unlock();
 }
 
-PackedData InetNetworker::get_data(long long client_id)
+PackedData InetNetworker::get_response(long long client_id)
 {
     m_id_to_data_mtx.lock();
 
@@ -177,6 +177,7 @@ void InetNetworker::client_thread(int socket, Client client)
         if(ready_count == 0)
         {
             // Если пакет больше не нужен, удаляем его.
+            m_snapshot_to_data[last_sent_snapshot_id + 1].second.clear();
             m_snapshot_to_data.erase(last_sent_snapshot_id + 1);
         }
 
@@ -192,7 +193,7 @@ void InetNetworker::client_thread(int socket, Client client)
         * FIXME Изменить признак отключения клиента. Он может отправить действительный
         * пакет нулевой длины, не отключаясь.
         */
-        if(data.get_size() == 0)
+        if(data.size() == 0)
         {
             // Закрываем соединение
             close(socket);
@@ -209,8 +210,8 @@ void InetNetworker::client_thread(int socket, Client client)
 
 void InetNetworker::send_data(int socket, PackedData data)
 {
-    char *raw_data = data.get_data().data();
-    DataSize length = data.get_size();
+    char *raw_data = data.data();
+    DataSize length = data.size();
     
     // Отправка длины сообщения
     write(socket, &length, sizeof(length));

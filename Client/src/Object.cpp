@@ -22,7 +22,7 @@ Object::Object(long long id, long long parent_id, GameManager* game_manager)
 Object::Object(PackedData data)
 {
     m_id.unpack(data.take());
-    m_name = data.take().get_data().data();
+    m_name = data.take().data();
     m_parent_id.unpack(data.take());
     
     IntField components_size;
@@ -30,7 +30,7 @@ Object::Object(PackedData data)
     m_components.clear();
     for(int i = 0; i < components_size; i++)
     {
-        char *component_name = data.take().get_data().data();
+        char *component_name = data.take().data();
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         PackedData component_data = data.take();
         component->unpack(component_data);
@@ -179,7 +179,9 @@ PackedData Object::pack()
 void Object::unpack(PackedData data)
 {
     m_id.unpack(data.take());
-    m_name = data.take().get_data().data();
+
+    m_name = data.take().data();
+
     m_parent_id.unpack(data.take());
 
     m_components.clear();
@@ -189,9 +191,7 @@ void Object::unpack(PackedData data)
 
     for(int i = 0; i < component_count; i++)
     {
-        std::vector<char> name_data = data.take().get_data();   // Взятие данных
-        name_data.push_back(0);                                 // Заключающий строку ноль
-        char *component_name = name_data.data();                // Нуль-терминированная строка из данных массива
+        std::string component_name = data.take().data();
 
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
         component->unpack(data.take());

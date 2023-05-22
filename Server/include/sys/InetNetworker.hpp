@@ -40,7 +40,7 @@ public:
     /// @brief Возвращает последний принятый ответ данного клиента
     /// @param client_id Номер клиента
     /// @return Упакованные данные ответа
-    PackedData get_data(long long client_id) override;
+    PackedData get_response(long long client_id) override;
     
     /// @return Список подключенных клиентов
     std::vector<Client> get_clients() override;

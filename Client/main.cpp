@@ -40,36 +40,6 @@ private:
     GameManager *m_game_manager;
 };
 
-int network_test()
-{
-    sys::InetNetworker networker;
-    networker.connect("localhost:8001");
-    
-    PackedData mail;
-    mail += "hello";
-    for(int i = 0; i < 1000; i++)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        PackedData data = networker.receive_snapshot();
-        std::cout << data.get_size() << std::endl;
-        if(data.get_size() > 0)
-        {
-            for(char c : data.get_data())
-            {
-                std::cout << c;
-            }
-            std::cout << '\n';
-        }
-        networker.send_response(mail);
-    }
-
-
-    std::this_thread::sleep_for(std::chrono::seconds(1000));
-    networker.disconnect();
-
-    return 0;
-}
-
 int game_test()
 {
     GameManager game_manager;

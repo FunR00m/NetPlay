@@ -174,11 +174,13 @@ void GameManager::read_responses()
             m_controllers[client.id] = std::make_shared<Controller>();
         }
         
-        PackedData data = m_networker->get_data(client.id);
-        if(data.get_size() > 0)
+        PackedData data = m_networker->get_response(client.id);
+        if(data.size() > 0)
         {
             m_controllers[client.id]->apply_changes(data.take());
         }
+
+        data.clear();
     }
 }
 

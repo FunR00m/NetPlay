@@ -118,21 +118,25 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
-        unpack(m_networker->receive_snapshot());
+        PackedData snapshot = m_networker->receive_snapshot();
+        unpack(snapshot);
         for(std::shared_ptr<ISystem> system : m_systems)
         {
             system->tick();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        if(snapshot.size() > 0)
+        {
+            m_networker->send_response(create_response());
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
-        m_networker->send_response(create_response());
         // m_networker->send_response(PackedData((void*)"1", 1));
     }
 }
 
 void GameManager::unpack(PackedData data)
 {
-    if(data.get_size() == 0)
+    if(data.size() == 0)
     {
         return;
     }
@@ -146,6 +150,8 @@ void GameManager::unpack(PackedData data)
         auto object = add_object();
         object->unpack(data.take());
     }
+
+    data.clear();
 }
 
 PackedData GameManager::create_response()
