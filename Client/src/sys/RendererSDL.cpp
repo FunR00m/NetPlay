@@ -20,6 +20,8 @@ void RendererSDL::setup()
     window_ = SDL_CreateWindow("0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
     set_window_title(window_title_);
     renderer_ = SDL_CreateRenderer(window_, -1, 0);
+
+    m_quit = false;
 }
 
 void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
@@ -36,10 +38,16 @@ void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
                 controller->release(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
                 break;
             case SDL_QUIT:
-                fixme("core::sys::RendererSDL::poll_events() SDL_QUIT event has not been implemented yet.");
+                // fixme("core::sys::RendererSDL::poll_events() SDL_QUIT event has not been implemented yet.");
+                m_quit = true;
                 break;
         }
     }
+}
+
+bool RendererSDL::is_quit()
+{
+    return m_quit;
 }
 
 void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
@@ -61,7 +69,6 @@ void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
     }
     
     SDL_Texture *sdl_texture = SDL_CreateTextureFromSurface(renderer_, native_texture->get_data());
-    // SDL_SetTextureAlphaMod(sdl_texture, opacity);
     SDL_Rect dstrect = { pos.x, pos.y, size.x, size.y };
     SDL_RenderCopy(renderer_, sdl_texture, NULL, &dstrect);
     SDL_DestroyTexture(sdl_texture);

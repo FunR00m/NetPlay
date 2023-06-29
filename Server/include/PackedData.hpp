@@ -28,7 +28,7 @@
 namespace engine
 {
 
-using DataSize = unsigned long long;
+using DataSize = unsigned int;
 
 class PackedData
 {

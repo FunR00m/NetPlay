@@ -40,11 +40,16 @@ public:
     /// Sets the window title
     /// - Parameter title: The new title
     void set_window_title(std::string title) override;
+
+    /// XXX Is the quit event caught
+    bool is_quit() override;
     
 private:
     SDL_Window *window_;
     SDL_Renderer *renderer_;
     std::string window_title_;
+    
+    bool m_quit;
 };
 
 }

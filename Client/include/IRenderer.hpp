@@ -30,6 +30,9 @@ public:
     /// Sets the window title
     /// - Parameter title: The new title
     virtual void set_window_title(std::string title) = 0;
+
+    /// XXX Is the quit event caught
+    virtual bool is_quit() = 0;
 };
 
 }

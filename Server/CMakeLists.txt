@@ -17,6 +17,7 @@ add_executable(Server
         src/sys/InetNetworker.cpp
         src/Components/Transform.cpp
         src/Components/Sprite.cpp
+        src/Components/Collider.cpp
         src/Systems/MoveSystem.cpp
         src/Controller.cpp
 )

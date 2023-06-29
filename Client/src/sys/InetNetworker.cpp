@@ -61,8 +61,11 @@ void InetNetworker::connect(std::string address)
 
 void InetNetworker::disconnect()
 {
-    m_running = false;
-    m_talk_thread->join();
+    if(!m_running)
+    {
+        m_running = false;
+        m_talk_thread->join();
+    }
 }
 
 PackedData InetNetworker::receive_snapshot()

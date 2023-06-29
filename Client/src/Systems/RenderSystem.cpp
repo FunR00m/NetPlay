@@ -10,6 +10,7 @@ void RenderSystem::start(GameManager *game_manager)
 {
     m_game = game_manager;
     m_renderer.setup();
+    m_renderer.set_window_title("Engine Test");
 }
 
 void RenderSystem::tick()
@@ -34,6 +35,16 @@ void RenderSystem::tick()
     }
     m_renderer.refresh();
     m_renderer.handle_events(m_game->get_controller());
+
+    if(m_renderer.is_quit())
+    {
+        m_game->stop();
+    }
+}
+
+void RenderSystem::stop()
+{
+    m_renderer.stop();
 }
 
 void RenderSystem::load_texture(std::string name)

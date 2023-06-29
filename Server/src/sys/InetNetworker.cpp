@@ -83,9 +83,6 @@ void InetNetworker::stop()
 
 void InetNetworker::send_snapshot(PackedData snapshot)
 { 
-    // Увеличиваем счётчик отправляемых пакетов
-    m_max_snapshot_id += 1;
-
     // Записываем новый пакет в индекс
     m_snapshot_to_data_mtx.lock();
     
@@ -93,6 +90,10 @@ void InetNetworker::send_snapshot(PackedData snapshot)
     m_snapshot_to_data[m_max_snapshot_id].second = snapshot;
     
     m_snapshot_to_data_mtx.unlock();
+
+    // Увеличиваем счётчик отправляемых пакетов
+    m_max_snapshot_id += 1;
+
 }
 
 PackedData InetNetworker::get_response(long long client_id)
@@ -161,6 +162,11 @@ void InetNetworker::client_thread(int socket, Client client)
         m_snapshot_to_data_mtx.lock();
         PackedData snapshot_data = m_snapshot_to_data[last_sent_snapshot_id + 1].second;
         m_snapshot_to_data_mtx.unlock();
+
+        if(snapshot_data.size() == 0)
+        {
+            continue;
+        }
         
         // Отправляем пакет
         send_data(socket, snapshot_data);
@@ -189,10 +195,10 @@ void InetNetworker::client_thread(int socket, Client client)
         // Получаем ответ клиента
         PackedData data = read_data(socket);
 
-        /* Проверяем, отключился ли клиент
-        * FIXME Изменить признак отключения клиента. Он может отправить действительный
-        * пакет нулевой длины, не отключаясь.
-        */
+        // Проверяем, отключился ли клиент
+        // FIXME Изменить признак отключения клиента. Он может отправить действительный
+        // пакет нулевой длины, не отключаясь.
+        //
         if(data.size() == 0)
         {
             // Закрываем соединение
@@ -244,7 +250,7 @@ PackedData InetNetworker::read_data(int socket)
     
     for(long long i = 0; i + buffer_size < length; i+= buffer_size)
     {
-	// Читаем кусок данных длиной buffer_size и добавляем его raw_data
+        // Читаем кусок данных длиной buffer_size и добавляем его raw_data
         read(socket, raw_data + i, buffer_size);
     }
     // Читаем оставшиеся данные
@@ -253,11 +259,9 @@ PackedData InetNetworker::read_data(int socket)
     // Создаём пакет из сырых данных
     PackedData data(raw_data, length);
 
-    /* Освобождаем выделенную память
-     * XXX После планируемой оптимизации PackedData освобождение памяти 
-     * будет лишним.
-     */
+    // Освобождаем выделенную память
     free(raw_data);
+
     return data;
 }
 
@@ -283,7 +287,7 @@ void InetNetworker::remove_client(long long client_id)
     
     m_clients_mtx.unlock();
     
-    m_clients_count--;
+    m_clients_count -= 1;
 
     debug("Client disconnected");
 }

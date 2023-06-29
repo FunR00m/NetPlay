@@ -14,8 +14,9 @@
 
 #include "Components/Transform.hpp"
 #include "Components/Sprite.hpp"
+#include "Components/NullComp.hpp"
+
 #include "Systems/RenderSystem.hpp"
-#include "sys/InetNetworker.hpp"
 
 using namespace engine;
 
@@ -36,6 +37,8 @@ public:
         }
     }
 
+    void stop() override {}
+
 private:
     GameManager *m_game_manager;
 };
@@ -43,8 +46,11 @@ private:
 int game_test()
 {
     GameManager game_manager;
+
     game_manager.register_component<Transform>("Transform");
     game_manager.register_component<Sprite>("Sprite");
+    game_manager.register_component<NullComp>("Collider");
+
     game_manager.add_system(std::make_shared<TestSystem>());
     game_manager.add_system(std::make_shared<RenderSystem>());
     game_manager.start();

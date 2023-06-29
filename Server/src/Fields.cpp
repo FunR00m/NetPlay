@@ -124,6 +124,11 @@ void Vec2Field::operator += (Vec2Field b)
     y += b.y;
 }
 
+void Vec2Field::operator -= (Vec2Field b)
+{
+    x -= b.x;
+    y -= b.y;
+}
 
 StringField::StringField()
 {

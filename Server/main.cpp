@@ -6,6 +6,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <thread>
 #include <chrono>
 #include <unistd.h>
@@ -15,6 +16,7 @@
 #include "Event.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Sprite.hpp"
+#include "Components/Collider.hpp"
 #include "Systems/MoveSystem.hpp"
 
 #include "sys/InetNetworker.hpp"
@@ -39,22 +41,24 @@ public:
             std::shared_ptr<Transform> transform = obj->get_component<Transform>();
 
             std::shared_ptr<Controller> controller = m_game->get_controller(clients[i].id);
+            
+            int player_speed = 15;
             if(controller->get_state('w'))
             {
-                transform->motion.y = -5;
+                transform->motion.y = -player_speed;
             } else if(controller->get_state('s'))
             {
-                transform->motion.y = 5;
+                transform->motion.y = player_speed;
             } else {
                 transform->motion.y = 0;
             }
 
             if(controller->get_state('a'))
             {
-                transform->motion.x = -5;
+                transform->motion.x = -player_speed;
             } else if(controller->get_state('d'))
             {
-                transform->motion.x = 5;
+                transform->motion.x = player_speed;
             } else {
                 transform->motion.x = 0;
             }
@@ -80,20 +84,68 @@ int game_test()
     
     game.get_root()->set_name("Root");
 
+    {
+        auto background = game.add_object("Background");
+        auto transform = background->add_component<Transform>();
+        transform->pos = { 0, 0 };
+        auto sprite = background->add_component<Sprite>();
+        sprite->name.s() = "sprites/level_1.png";
+        sprite->size = { 800, 600 };
+        sprite->pos = transform->pos;
+    }
+
     for(int i = 0; i < 2; i++)
     {
         auto box = game.add_object("Player_" + std::to_string(i));
 
         auto box_transform = box->add_component<Transform>();
-        box_transform->move_event += move_listener; 
-        box_transform->pos.x = 90 * (i + 1);
-        box_transform->pos.y = 90;
+        box_transform->pos.x = 100 + 50 * (i % 10);
+        box_transform->pos.y = 500 + 10 * (i / 10);
+
+        auto box_collider = box->add_component<Collider>();
+        box_collider->rect = { 50, 50 };
 
         auto sprite = box->add_component<Sprite>();
         sprite->pos = box_transform->pos;
-        sprite->size.x = 200;
-        sprite->size.y = 200;
-        sprite->name.s() = "image.png";
+        sprite->size = { 50, 50 };
+        sprite->name.s() = "player_" + std::to_string(i % 2 + 1) + ".png";
+    }
+
+    {
+        std::ifstream map_file;
+        map_file.open("level_1.map");
+
+        while(true)
+        {
+            std::string type;
+            map_file >> type;
+            if(type[0] == '#')
+            {
+                continue;
+            } else if(type == "[END]")
+            {
+                break;
+            } else if(type == "[WALL]")
+            {
+                int x, y;
+
+                auto wall = game.add_object();
+
+                auto wall_transform = wall->add_component<Transform>();
+                
+                map_file >> x >> y;
+                wall_transform->pos = { x, y };
+
+                auto wall_collider = wall->add_component<Collider>();
+                wall_collider->pos = wall_transform->pos;
+
+                map_file >> x >> y;
+                wall_collider->rect = { x, y };
+            } else {
+                error("Unknown map object type \"" + type + "\"");
+                break;
+            }
+        }
     }
     
     game.start();
@@ -118,7 +170,6 @@ int network_test()
     data += "Hello, World!";
     data += "12345";
     data += "6789";
-    data += "yeah yeah";
     
     for(int i = 0; i < 100; i++)
     {

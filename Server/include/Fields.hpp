@@ -56,6 +56,7 @@ public:
     void apply_changes(PackedData data) override;
     
     void operator += (Vec2Field b);
+    void operator -= (Vec2Field b);
     
     IntField x, y;
 };

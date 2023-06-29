@@ -176,4 +176,14 @@ std::shared_ptr<Controller> GameManager::get_controller()
     return m_controller;
 }
 
+void GameManager::stop()
+{
+    for(std::shared_ptr<ISystem> system : m_systems)
+    {
+        system->stop();
+    }
+
+    m_networker->disconnect();
+}
+
 }

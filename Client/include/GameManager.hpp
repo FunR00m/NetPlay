@@ -99,6 +99,9 @@ public:
     std::string get_component_type_name(std::string component_name);
 
     std::shared_ptr<Controller> get_controller();
+
+    /// @brief Останавливает все системы и модули
+    void stop();
     
 private:
     /// Словарь вида *номер объекта-объект*

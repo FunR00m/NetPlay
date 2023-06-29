@@ -23,6 +23,8 @@ public:
 
     void tick() override;
 
+    void stop() override;
+
     void load_texture(std::string name);
 
 private:

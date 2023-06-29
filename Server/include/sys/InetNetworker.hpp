@@ -5,8 +5,8 @@
 //  Created by Fedor Fedor on 15.04.2023.
 //
 
-#ifndef InetNetworker_hpp
-#define InetNetworker_hpp
+#ifndef INETNETWORKER_HPP
+#define INETNETWORKER_HPP
 
 #include <thread>
 #include <map>
