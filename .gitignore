@@ -1,6 +1,7 @@
-.vscode
-.DS_Store
-Server/.vscode
+**/.DS_Store
+
+**/.vscode
+**/.cache
+
 Server/build
-Client/.vscode
 Client/build
