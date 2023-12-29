@@ -34,6 +34,7 @@ public:
         for(auto obj : m_game_manager->get_objects())
         {
             // Пока пусто
+            m_game_manager->get_controller()->get_state('w');
         }
     }
 
