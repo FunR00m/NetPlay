@@ -185,6 +185,7 @@ PackedData InetNetworker::read_data(int socket)
 
     // Освобождаем выделенную память
     free(raw_data);
+
     return data;
 }
 

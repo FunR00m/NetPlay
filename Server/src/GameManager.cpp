@@ -105,8 +105,11 @@ void GameManager::start()
         system->start(this);
     }
     
-    m_running = true;
+    // Запускаем сетевой модуль
     m_networker->start_listening();
+
+    // Запускаем цикл
+    m_running = true;
     game_loop();
 }
 
@@ -114,13 +117,19 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
+        // Ждём некоторое время перед следующей итерацией
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+        // Обрабатываем ответы клиентов
         read_responses();
+
+        // Вызываем итерации всех систем
         for(std::shared_ptr<ISystem> system : m_systems)
         {
             system->tick();
         }
 
+        // Отправляем текущее состояние клиентам
         m_networker->send_snapshot(pack());
     }
 }
@@ -128,6 +137,7 @@ void GameManager::game_loop()
 PackedData GameManager::pack()
 {
     PackedData data;
+    data.set_keep_data(true);
 
     // Добавляем количество последующих объектов
     data += IntField(m_objects.size()).pack();
@@ -165,18 +175,23 @@ std::shared_ptr<Controller> GameManager::get_controller(long long client_id)
 
 void GameManager::read_responses()
 {
+    // Получаем список подключенных клиентов
     std::vector<Client> clients = m_networker->get_clients();
 
     for(Client client : clients)
     {
+        // Проверяем, существует ли у клиента контроллер
         if(m_controllers.find(client.id) == m_controllers.end())
         {
+            // Если нет, то создаём новый
             m_controllers[client.id] = std::make_shared<Controller>();
         }
         
+        // Читаем ответ клиента
         PackedData data = m_networker->get_response(client.id);
         if(data.size() > 0)
         {
+            // Применяем изменения состояния контроллера
             m_controllers[client.id]->apply_changes(data.take());
         }
 

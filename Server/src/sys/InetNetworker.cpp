@@ -33,6 +33,13 @@ InetNetworker::InetNetworker()
 
 void InetNetworker::start_listening()
 {
+    // Проверяем, не запущен ли модуль
+    if(m_running)
+    {
+        error("[InetNetworker::start_listening()] Already running. Can't start again.");
+        return;
+    }
+
     // Создаём сокет для новых подключений
     m_listen_socket = socket(AF_INET, SOCK_STREAM, 0);
     if(m_listen_socket == -1)
@@ -83,17 +90,26 @@ void InetNetworker::stop()
 
 void InetNetworker::send_snapshot(PackedData snapshot)
 { 
-    // Записываем новый пакет в индекс
+    // Проверяем, есть ли подключенные клиенты.
+    if(m_clients_count == 0)
+    {
+        // Если нет, то удаляем пакет, потому что его некому отправлять
+        snapshot.clear();
+        return;
+    }
+
+
     m_snapshot_to_data_mtx.lock();
     
+    // Записываем новый пакет в индекс
     m_snapshot_to_data[m_max_snapshot_id].first = m_clients_count;
     m_snapshot_to_data[m_max_snapshot_id].second = snapshot;
     
     m_snapshot_to_data_mtx.unlock();
 
+
     // Увеличиваем счётчик отправляемых пакетов
     m_max_snapshot_id += 1;
-
 }
 
 PackedData InetNetworker::get_response(long long client_id)
@@ -134,6 +150,9 @@ void InetNetworker::listen_thread()
         
         // Увеличиваем счётчик номеров клиентов
         m_max_client_id += 1;
+
+        // Увеличиваем счётчик количества подключенных клиентов
+        m_clients_count += 1;
         
         m_clients_mtx.lock();
 
@@ -162,6 +181,7 @@ void InetNetworker::client_thread(int socket, Client client)
         m_snapshot_to_data_mtx.lock();
         PackedData snapshot_data = m_snapshot_to_data[last_sent_snapshot_id + 1].second;
         m_snapshot_to_data_mtx.unlock();
+        
 
         if(snapshot_data.size() == 0)
         {
@@ -171,6 +191,7 @@ void InetNetworker::client_thread(int socket, Client client)
         // Отправляем пакет
         send_data(socket, snapshot_data);
         
+
         m_snapshot_to_data_mtx.lock();
 
         // Читаем счётчик клиентов, которые получили данный пакет
@@ -188,6 +209,7 @@ void InetNetworker::client_thread(int socket, Client client)
         }
 
         m_snapshot_to_data_mtx.unlock();
+
         
         // Увеличиваем номер последнего отправленного пакета
         last_sent_snapshot_id += 1;
@@ -204,12 +226,15 @@ void InetNetworker::client_thread(int socket, Client client)
             // Закрываем соединение
             close(socket);
             remove_client(client.id);
+            data.clear();
             return;
         }
 
-        // Записываем полученный ответ в соответствующую ячейку индекса
         m_id_to_data_mtx.lock();
+
+        // Записываем полученный ответ в соответствующую ячейку индекса
         m_id_to_data[client.id] = data;
+
         m_id_to_data_mtx.unlock();
     }
 }
@@ -226,7 +251,7 @@ void InetNetworker::send_data(int socket, PackedData data)
     const int buffer_size = BUFFER_SIZE;
     for(long long i = 0; i + buffer_size < length; i += buffer_size)
     {
-	// Последовательно отправляем куски данных размером buffer_size
+	    // Последовательно отправляем куски данных размером buffer_size
         write(socket, raw_data + i, buffer_size);
     }
     // Отправляем оставшиеся данные
@@ -258,6 +283,7 @@ PackedData InetNetworker::read_data(int socket)
     
     // Создаём пакет из сырых данных
     PackedData data(raw_data, length);
+    data.set_keep_data(true);
 
     // Освобождаем выделенную память
     free(raw_data);
@@ -267,10 +293,13 @@ PackedData InetNetworker::read_data(int socket)
 
 void InetNetworker::remove_client(long long client_id)
 {
+    // Номер клиента в массиве
     long long i = 0;
     
+
     m_clients_mtx.lock();
     
+    // Ищем номер клиента в массиве
     for(i = 0; i < m_clients.size(); i++)
     {
         if(m_clients[i].id == client_id)
@@ -278,15 +307,23 @@ void InetNetworker::remove_client(long long client_id)
             break;
         }
     }
+
+    // Находим итератор клиента
     auto client = m_clients.begin() + i;
+    
+    // Проверяем существует ли клиент с таким номером
     if(client == m_clients.end())
     {
         return;
     }
+
+    // Удаляем клиента из массива
     m_clients.erase(client);
     
     m_clients_mtx.unlock();
+
     
+    // Уменьшаем счётчик подключенных клиентов
     m_clients_count -= 1;
 
     debug("Client disconnected");

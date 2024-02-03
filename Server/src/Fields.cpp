@@ -47,7 +47,7 @@ void IntField::unpack(PackedData data)
 {
     if(data.size() != sizeof(m_number))
     {
-        error("[IntField::unpack] Unable to unpack the data.");
+        error("[IntField::unpack] Unable to unpack data.");
     }
     m_number = *(int*) data.data();
 }

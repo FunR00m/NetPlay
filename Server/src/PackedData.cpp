@@ -24,6 +24,9 @@ PackedData::PackedData()
         m_alloc_size = 0;
         m_data = nullptr;
         m_alloc_data = nullptr;
+        
+        m_readonly = false;
+        m_keep_data = false;
 }
 
 PackedData::PackedData(char* data, char* alloc_data, DataSize size)
@@ -32,6 +35,9 @@ PackedData::PackedData(char* data, char* alloc_data, DataSize size)
         m_alloc_data = alloc_data;
         m_size = size;
         m_alloc_size = -1;
+
+        m_readonly = true;
+        m_keep_data = true;
 }
 
 PackedData::PackedData(void* data, DataSize size)
@@ -42,27 +48,52 @@ PackedData::PackedData(void* data, DataSize size)
 
         m_data = m_alloc_data;
         m_size = m_alloc_size = size;
+
+        m_readonly = false;
+        m_keep_data = false;
+}
+
+PackedData::~PackedData()
+{
+        if(!m_keep_data)
+        {
+                free(m_alloc_data);
+        }
 }
 
 void PackedData::operator += (PackedData other)
 {
-        if(m_alloc_size == -1)
+        // Проверяем, можно ли добавлять данные в пакет
+        if(m_readonly)
         {
-                error("[PackedData::operator +=] Attempting to change read-only data");
+                error("[PackedData::operator +=] Attempting to append to read-only data");
                 return;
         }
+
+        // Проверяем, выделена ли память
         if(m_alloc_data != nullptr)
         {
+                // Если да, то расширяем участок памяти. Учитывается
+                // размер добавляемого пакета и размер значения его размер.
                 m_alloc_data = (char*) realloc(m_alloc_data, m_alloc_size + other.size() + sizeof(DataSize));
+                
+                // Обновляем указатель на непрочитанные данные
                 m_data = m_alloc_data + m_alloc_size - m_size;
         } else {
+                // Если нет, то инициализируем данные
                 m_data = m_alloc_data = (char*) malloc(other.size() + sizeof(DataSize));
                 m_alloc_size = 0;
         }
+
+        // Добавляем в начало нового участка значение размера добавляемого
+        // пакета
         DataSize size = other.size();
         memcpy(m_alloc_data + m_alloc_size, &size, sizeof(DataSize));
+
+        // Добавляем данные пакета
         memcpy(m_alloc_data + m_alloc_size + sizeof(DataSize), other.data(), other.size());
 
+        // Обновляем значение размеров хранимых данных и выделенной памяти
         m_size += other.size() + sizeof(DataSize);
         m_alloc_size += other.size() + sizeof(DataSize);
 }
@@ -70,7 +101,9 @@ void PackedData::operator += (PackedData other)
 void PackedData::operator += (std::string string)
 {
     PackedData string_data((void*) string.c_str(), string.size() + 1);
+    string_data.set_keep_data(true);
     *this += string_data;
+    string_data.clear();
 }
 
 PackedData PackedData::take()
@@ -109,7 +142,23 @@ DataSize PackedData::alloc_size()
 
 void PackedData::clear()
 {
+        // Проверяем, можно ли освободить память
+        if(m_readonly)
+        {
+                error("[PackedData::clear] Can't clear read-only pack.");
+                return;
+        }
+
         free(m_alloc_data);
+}
+
+void PackedData::set_keep_data(bool keep_data)
+{
+        if(m_readonly && (!keep_data))
+        {
+                error("[PackedData::set_keep_data] Can't set keep_data to false for a read-only pack.");
+        }
+        m_keep_data = keep_data;
 }
 
 }
