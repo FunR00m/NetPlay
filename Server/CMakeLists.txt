@@ -18,6 +18,7 @@ add_executable(Server
         src/Components/Transform.cpp
         src/Components/Sprite.cpp
         src/Components/Collider.cpp
+        src/Components/TriggerCollider.cpp
         src/Systems/MoveSystem.cpp
         src/Controller.cpp
 )

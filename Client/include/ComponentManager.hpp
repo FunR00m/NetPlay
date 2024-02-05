@@ -1,6 +1,7 @@
 #include <memory>
 #include <functional>
 #include <unordered_map>
+#include <set>
 
 #include "IComponent.hpp"
 #include "utils/debug.hpp"
@@ -53,6 +54,9 @@ private:
 
     /// @brief Словарь вида имя компонента -- название его типа
     std::unordered_map<std::string, std::string> m_name_to_type;
+    
+    /// @brief Множество предупреждений о незарегистрированных компонентах
+    std::set<std::string> m_already_warned;
 
     template<typename T>
     static std::shared_ptr<IComponent> factory()

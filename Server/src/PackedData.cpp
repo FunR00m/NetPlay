@@ -4,7 +4,7 @@
 //  | Файл: PackedData.cpp                                   |  //
 //  | Автор: Fedor Buben <bubenfedor0@gmail.com>             |  //
 //  | Дата создания: 02.04.2023                              |  //
-//  | Дата изменения: 22.04.2023                             |  //
+//  | Дата изменения: 03.02.2024                             |  //
 //  | Описание: Последовательность байт, готовая к передаче. |  //
 //  |--------------------------------------------------------|  //
 //  | ПОДРОБНОЕ ОПИСАНИЕ                                     |  //
@@ -55,7 +55,7 @@ PackedData::PackedData(void* data, DataSize size)
 
 PackedData::~PackedData()
 {
-        if(!m_keep_data)
+        if((!m_keep_data) && (m_alloc_data != nullptr))
         {
                 free(m_alloc_data);
         }

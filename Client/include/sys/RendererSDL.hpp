@@ -11,7 +11,7 @@
 #include <memory>
 #include <SDL2/SDL.h>
 
-#include "../IRenderer.hpp"
+#include "IRenderer.hpp"
 #include "TextureSDL.hpp"
 
 namespace engine

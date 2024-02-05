@@ -6,11 +6,15 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_package(SDL2 REQUIRED)
+find_package(SDL2_IMAGE REQUIRED)
+
 # Добавляем папку include в пути поиска заголовочных файлов
 include_directories(include)
 
 # include_directories(/usr/local/include)
 include_directories(third-party/include)
+# include_directories(Client ${SDL2_INCLUDE_DIRS})
 
 # Добавляем исходные файлы проекта
 add_executable(Client
@@ -37,6 +41,7 @@ add_executable(Client
 
 # target_link_directories(Client PUBLIC /usr/local/lib)
 target_link_directories(Client PUBLIC third-party/lib)
+# target_link_directories(Client PUBLIC ${SDL2_LIBDIR})
 target_link_libraries(Client SDL2 SDL2_image)
 
 configure_file(${CMAKE_SOURCE_DIR}/image.png ${CMAKE_BINARY_DIR}/image.png COPYONLY)

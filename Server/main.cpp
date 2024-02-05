@@ -17,6 +17,7 @@
 #include "Components/Transform.hpp"
 #include "Components/Sprite.hpp"
 #include "Components/Collider.hpp"
+#include "Components/TriggerCollider.hpp"
 #include "Systems/MoveSystem.hpp"
 
 #include "sys/InetNetworker.hpp"
@@ -69,6 +70,38 @@ private:
 	GameManager *m_game;
 };
 
+class DoorSystem : public ISystem
+{
+public:
+	void start(GameManager *game_manager)
+	{
+		m_game = game_manager;
+	}
+
+    void tick()
+    {
+        std::vector<Client> clients = m_game->get_clients();
+
+        auto key = m_game->get_root()->get_child("Key");
+        auto key_collider = key->get_component<TriggerCollider>();
+
+        for(int i = 0; i < clients.size(); i++)
+        {
+            auto player = m_game->get_root()->get_child("Player_" + std::to_string(i));
+            auto player_collider = player->get_component<Collider>();
+            if(key_collider->collision(player_collider))
+            {
+                auto door = m_game->get_root()->get_child("Door");
+                auto collider = door->get_component<Collider>();
+                collider->rect = { 0, 0 };
+            }
+        }
+    }
+
+private:
+	GameManager *m_game;
+};
+
 void move_listener(Vec2Field pos)
 {
     // std::cout << "MOVE EVENT: " << pos.x << ' ' << pos.y << '\n';
@@ -81,6 +114,7 @@ int game_test()
     std::shared_ptr<MoveSystem> move_system = std::make_shared<MoveSystem>();
     game.add_system(move_system);
     game.add_system(std::make_shared<TestSystem>());
+    game.add_system(std::make_shared<DoorSystem>());
     
     game.get_root()->set_name("Root");
 
@@ -119,13 +153,13 @@ int game_test()
         {
             std::string type;
             map_file >> type;
-            if(type[0] == '#')
+            if(type[0] != '[')
             {
                 continue;
             } else if(type == "[END]")
             {
                 break;
-            } else if(type == "[WALL]")
+            } else if(type == "[WALL]" || type == "[DOOR]" || type == "[KEY]")
             {
                 int x, y;
 
@@ -136,14 +170,27 @@ int game_test()
                 map_file >> x >> y;
                 wall_transform->pos = { x, y };
 
-                auto wall_collider = wall->add_component<Collider>();
+                std::shared_ptr<Collider> wall_collider;
+                if(type == "[KEY]")
+                {
+                    wall_collider = wall->add_component<TriggerCollider>();
+                } else {
+                    wall_collider = wall->add_component<Collider>();
+                }
                 wall_collider->pos = wall_transform->pos;
 
                 map_file >> x >> y;
                 wall_collider->rect = { x, y };
+
+                if(type == "[DOOR]")
+                {
+                    wall->set_name("Door");
+                } else if(type == "[KEY]")
+                {
+                    wall->set_name("Key");
+                }
             } else {
-                error("Unknown map object type \"" + type + "\"");
-                break;
+                warning("Unknown map object type \"" + type + "\"");
             }
         }
     }

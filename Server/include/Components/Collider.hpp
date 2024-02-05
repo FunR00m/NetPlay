@@ -8,6 +8,7 @@
 namespace engine
 {
 
+/// @brief Описывает модель столкновений
 class Collider : public IComponent
 {
 public:
@@ -26,8 +27,11 @@ public:
 
     void apply_changes(PackedData data) override;
 
-    std::string get_name() override;
+    virtual std::string get_name() override;
 
+    /// @returns ```true```, если если есть пересечение с другим
+    /// объектом типа collider.
+    /// @param other Указатель на другой объект типа collider
     bool collision(std::shared_ptr<Collider> other);
 
 };

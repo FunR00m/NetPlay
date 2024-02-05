@@ -182,6 +182,7 @@ PackedData InetNetworker::read_data(int socket)
     
     // Создаём пакет из сырых данных. Эти данные будут скопированы.
     PackedData data(raw_data, length);
+    data.set_keep_data(true);
 
     // Освобождаем выделенную память
     free(raw_data);

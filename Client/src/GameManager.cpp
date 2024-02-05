@@ -104,13 +104,17 @@ void GameManager::add_system(std::shared_ptr<ISystem> system)
 
 void GameManager::start()
 {
+    // Запускаем все системы
     for(std::shared_ptr<ISystem> system : m_systems)
     {
         system->start(this);
     }
     
-    m_running = true;
+    // Подключаемся к серверу
     m_networker->connect("localhost:8001");
+
+    // Запускаем игровой цикл
+    m_running = true;
     game_loop();
 }
 
@@ -118,46 +122,73 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
+        // Получаем пакет с сервера
         PackedData snapshot = m_networker->receive_snapshot();
+        
+        // Распаковываем пакет
         unpack(snapshot);
+
+        // Запускаем итерацию каждой системы
         for(std::shared_ptr<ISystem> system : m_systems)
         {
-            system->tick();
+            // Каждый раз проверяем, должен ли быть запущен цикл.
+            // Это необходимо, потому что одна из систем может
+            // вызвать GameManager::stop().
+            if(m_running)
+            {
+                system->tick();
+            } else {
+                return;
+            }
         }
+
+        // Проверяем, пришел ли пакет с сервера
         if(snapshot.size() > 0)
         {
+            // Создаём и отправляем ответ серверу
             m_networker->send_response(create_response());
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
-        // m_networker->send_response(PackedData((void*)"1", 1));
+        // Ждём перед следующей итерацией
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
 void GameManager::unpack(PackedData data)
 {
+    // Проверяем, пуст ли пакет. Если да, то значит, что
+    // ответ ещё не пришёл и распаковывать его не нужно.
     if(data.size() == 0)
     {
         return;
     }
 
+    // Распаковываем количество объектов
     IntField object_count;
     object_count.unpack(data.take());
 
+    // Полностью заменяем объекты
     m_objects.clear();
     for(int i = 0; i < object_count; i++)
     {
+        // Создаём новый объект из данных пакета
         auto object = add_object();
         object->unpack(data.take());
     }
 
+    // Очищаем данные пакета
     data.clear();
 }
 
 PackedData GameManager::create_response()
 {
+    // Создаём новый пакет
     PackedData data;
+    data.set_keep_data(true);
+
+    // Добавляем данные об изменении состояния контроллера
     data += m_controller->fetch_changes();
+
     return data;
 }
 
@@ -178,6 +209,11 @@ std::shared_ptr<Controller> GameManager::get_controller()
 
 void GameManager::stop()
 {
+    debug("[GameManager::stop()] Stopping");
+
+    m_running = false;
+
+    // Останавливаем все системы
     for(std::shared_ptr<ISystem> system : m_systems)
     {
         system->stop();

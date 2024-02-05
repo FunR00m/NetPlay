@@ -178,24 +178,37 @@ PackedData Object::pack()
 
 void Object::unpack(PackedData data)
 {
+    // Распаковываем основные характеристики объекта 
     m_id.unpack(data.take());
 
     m_name = data.take().data();
 
     m_parent_id.unpack(data.take());
 
+    // Удаляем все компоненты для замены на новые
     m_components.clear();
 
+    // Распаковываем количество компонентов
     IntField component_count;
     component_count.unpack(data.take());
 
+    // Распаковываем все компоненты
     for(int i = 0; i < component_count; i++)
     {
+        // Распаковываем имя типа компонента
         std::string component_name = data.take().data();
 
+        // Создаём компонент указанного типа
         std::shared_ptr<IComponent> component = m_game_manager->create_component(component_name);
-        component->unpack(data.take());
         
+        // Проверяем, удалось ли создать компонент
+        if(component != nullptr)
+        {
+            // Если да, то распаковываем его данные
+            component->unpack(data.take());
+        }
+        
+        // Добавляем компонент во внутренний индекс компонентов объекта
         std::string type_name = m_game_manager->get_component_type_name(component_name);
         m_components[type_name] = component;
     }

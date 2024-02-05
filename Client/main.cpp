@@ -51,6 +51,7 @@ int game_test()
     game_manager.register_component<Transform>("Transform");
     game_manager.register_component<Sprite>("Sprite");
     game_manager.register_component<NullComp>("Collider");
+    // game_manager.register_component<NullComp>("TriggerCollider");
 
     game_manager.add_system(std::make_shared<TestSystem>());
     game_manager.add_system(std::make_shared<RenderSystem>());
