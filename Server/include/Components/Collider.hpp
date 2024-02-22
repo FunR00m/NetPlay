@@ -29,7 +29,7 @@ public:
 
     virtual std::string get_name() override;
 
-    /// @returns ```true```, если если есть пересечение с другим
+    /// @returns ```true```, если есть пересечение с другим
     /// объектом типа collider.
     /// @param other Указатель на другой объект типа collider
     bool collision(std::shared_ptr<Collider> other);

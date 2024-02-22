@@ -40,7 +40,7 @@ public:
     
     template<typename T>
     /// @brief Возвращает указатель на компонент данного типа. Если такового нет
-    /// в объекте, возвращает `nullptr`.
+    /// в объекте, возвращает ```nullptr```.
     std::shared_ptr<T> get_component()
     {
         return std::dynamic_pointer_cast<T>(get_component(typeid(T).name()));
@@ -48,7 +48,7 @@ public:
     
     template<typename T>
     /// @brief Добавляет в объект компонент данного типа и возвращает указатель на него.
-    /// Если такой уже существует, возвращает `nullptr`.
+    /// Если такой уже существует, возвращает ```nullptr```.
     std::shared_ptr<T> add_component()
     {
         if(m_components.find(typeid(T).name()) != m_components.end())
@@ -76,17 +76,6 @@ public:
     /// @returns  Указатель на новый объект
     ///
     std::shared_ptr<Object> add_child();
-    
-    /// @brief **НЕ ИСПОЛЬЗВАТЬ**. Добавляет дочерний объект по указателю.
-    ///
-    /// Вызывается только из метода `GameObject::add_object()`. Добавляет
-    /// дочерний объект во внутренний индекс.
-    ///
-    /// @param child Указатель на объект, который нужно добавить.
-    ///
-    /// @returns  Указатель на новый объект
-    ///
-    std::shared_ptr<Object> add_child(std::shared_ptr<Object> child);
     
     /// @brief Изменяет имя данного объекта.
     ///
@@ -180,6 +169,22 @@ private:
     ///    - name: Имя удаляемого объекта
     ///
     void clear_child_name(std::string name);
+
+    /// @brief Добавляет дочерний объект во внутренний индекс
+    ///
+    /// Вызывается только из метода `GameObject::add_object()`. Добавляет
+    /// дочерний объект во внутренний индекс.
+    ///
+    /// @param child Указатель на объект, который нужно добавить.
+    ///
+    void register_child(std::shared_ptr<Object> child);
+
+    void deregister_child(long long child_id);
+    
+    // GameManager должен иметь доступ к методам register_child и
+    // clear_child_name
+    friend GameManager;
+
 };
 
 }

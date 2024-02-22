@@ -47,7 +47,7 @@ void IntField::unpack(PackedData data)
 {
     if(data.size() != sizeof(m_number))
     {
-        error("[IntField::unpack] Unable to unpack data.");
+        error("[IntField::unpack] Unable to unpack the data.");
     }
     m_number = *(int*) data.data();
 }
@@ -77,6 +77,59 @@ IntField IntField::operator -= (IntField b)
     return m_number;
 }
 
+BoolField::BoolField()
+{
+    m_value = false;
+    m_prev = true;
+}
+
+BoolField::BoolField(bool value)
+{
+    m_value = value;
+    m_prev = !value;
+}
+BoolField::operator bool()
+{
+    return m_value;
+}
+
+PackedData BoolField::pack()
+{
+    return PackedData((void*)&m_value, sizeof(m_value));
+}
+
+PackedData BoolField::fetch_changes()
+{
+    if(m_prev == m_value)
+    {
+        return PackedData();
+    } else {
+        m_prev = m_value;
+        return pack();
+    }
+}
+
+void BoolField::unpack(PackedData data)
+{
+    if(data.size() != sizeof(m_value))
+    {
+        error("[BoolField::unpack] Unable to unpack the data.");
+    }
+    m_value = *(bool*) data.data();
+}
+
+void BoolField::apply_changes(PackedData data)
+{
+    if(data.size() == 0)
+    {
+        return;
+    } else if(data.size() == sizeof(m_value))
+    {
+        unpack(data);
+    } else {
+        error("[BoolField::apply_changes] Unable to apply changes.");
+    }
+}
 
 Vec2Field::Vec2Field()
 {

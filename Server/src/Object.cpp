@@ -54,12 +54,11 @@ std::shared_ptr<Object> Object::add_child()
     return new_object;
 }
 
-std::shared_ptr<Object> Object::add_child(std::shared_ptr<Object> child)
+void Object::register_child(std::shared_ptr<Object> child)
 {
     if(child->get_parent()->get_id() != m_id)
     {
         error("[Object::add_child(child)] Current ID and child's ID does not match! Current object ID: " + std::to_string(m_id));
-        return nullptr;
     }
     m_children.push_back(child);
     m_id_to_child[child->get_id()] = child;
@@ -67,8 +66,6 @@ std::shared_ptr<Object> Object::add_child(std::shared_ptr<Object> child)
     {
         m_name_to_child[child->get_name()] = child;
     }
-    
-    return child;
 }
 
 void Object::set_name(std::string name)

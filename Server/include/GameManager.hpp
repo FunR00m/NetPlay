@@ -4,7 +4,7 @@
 //  | Файл: GameManager.hpp                                  |  //
 //  | Автор: Fedor Buben <bubenfedor0@gmail.com>             |  //
 //  | Дата создания: 07.04.2023                              |  //
-//  | Дата изменения: 07.04.2023                             |  //
+//  | Дата изменения: 10.02.2024                             |  //
 //  | Описание: GameManager - сердце игры.                   |  //
 //  |--------------------------------------------------------|  //
 //  | ПОДРОБНОЕ ОПИСАНИЕ                                     |  //
@@ -73,8 +73,13 @@ public:
     /// - Parameter name: Имя нового объекта
     ///
     std::shared_ptr<Object> add_object(long long parent_id, std::string name);
+
+    /// @brief Удаляет объект и все его дочерние объекты
+    /// @param object_id Уникальный номер удаляемого объекта
+    /// @note НЕ РАБОТАЕТ
+    void remove_object(long long object_id);
     
-    /// Возвращает массив всех объектов.
+    /// @returns Массив всех объектов.
     std::vector<std::shared_ptr<Object>> get_objects();
     
     /// Добавляет систему.
@@ -98,24 +103,25 @@ public:
     std::vector<Client> get_clients();
     
 private:
-    /// Словарь вида *номер объекта-объект*
+    /// @brief Словарь вида ```номер объекта``` - ```объект```
     std::map<long long, std::shared_ptr<Object>> m_id_to_object;
     
-    /// Массив всех объектов
+    /// @brief Массив всех объектов
     std::vector<std::shared_ptr<Object>> m_objects;
     
-    /// Указатель на корневой объект
+    /// @brief Указатель на корневой объект
     std::shared_ptr<Object> m_root;
     
-    /// Максимальный занятый номер объекта
+    /// @brief Максимальный использованный номер объекта
     long long m_max_id;
     
-    /// Запущена ли игра
+    /// @brief Запущена ли игра
     bool m_running;
     
-    /// Массив всех систем
+    /// @brief Массив всех систем
     std::vector<std::shared_ptr<ISystem>> m_systems;
     
+    /// @brief Указатель на используемый сетевой модуль
     std::shared_ptr<INetworker> m_networker;
 
     std::shared_ptr<ComponentManager> m_component_manager;
@@ -126,8 +132,11 @@ private:
     /// Функция главного игрового цикла.
     void game_loop();
 
+    /// @brief Упаковывает текущее состояние игрового мира
+    /// @return Пакет состояния игрового мира
     PackedData pack();
 
+    /// @brief Читает и обрабатывает ответы клиентов
     void read_responses();
 };
 

@@ -1,10 +1,10 @@
 //  __________-----------================-----------__________  //
 //  =====================<  NETPLAY  4  >=====================  //
-//  | Проект: NetPlay Server 4                               |  //
+//  | Проект: NetPlay Client 4                               |  //
 //  | Файл: Fields.hpp                                       |  //
 //  | Автор: Fedor Buben <bubenfedor0@gmail.com>             |  //
 //  | Дата создания: 03.04.2023                              |  //
-//  | Дата изменения: 03.04.2023                             |  //
+//  | Дата изменения: 10.02.2024                             |  //
 //  | Описание: Объявление часто встречающихся полей.        |  //
 //  |--------------------------------------------------------|  //
 //  | ПОДРОБНОЕ ОПИСАНИЕ                                     |  //
@@ -43,6 +43,23 @@ public:
 private:
     int m_number;
     int m_prev;
+};
+
+class BoolField : public IField
+{
+public:
+    BoolField();
+    BoolField(bool value);
+    PackedData pack() override;
+    PackedData fetch_changes() override;
+    void unpack(PackedData data) override;
+    void apply_changes(PackedData data) override;
+    
+    operator bool ();
+    
+private:
+    bool m_value;
+    bool m_prev;
 };
 
 class Vec2Field : public IField

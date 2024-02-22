@@ -59,7 +59,7 @@ std::shared_ptr<Object> GameManager::add_object(long long parent_id)
     m_objects.push_back(new_object);
 
     // Добавляем объект в индекс родительского объекта
-    parent->add_child(new_object);
+    parent->register_child(new_object);
     
     return new_object;
 }
@@ -80,6 +80,23 @@ std::shared_ptr<Object> GameManager::add_object(long long parent_id, std::string
 std::shared_ptr<Object> GameManager::add_object(std::string name)
 {
     return add_object(0, name);
+}
+
+// НЕ РАБОТАЕТ
+void GameManager::remove_object(long long object_id)
+{
+    // Получаем указатель на удаляемый объект
+    std::shared_ptr<Object> object_ptr = m_id_to_object[object_id];
+
+    // Находим и удаляем объект из массива объектов
+    for(int i = 0; i < m_objects.size(); i++)
+    {
+        if(m_objects[i] == object_ptr)
+        {
+            m_objects.erase(m_objects.begin() + i);
+            break;
+        }
+    }
 }
 
 std::vector<std::shared_ptr<Object>> GameManager::get_objects()
