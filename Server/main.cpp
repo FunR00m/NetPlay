@@ -82,18 +82,24 @@ public:
     {
         std::vector<Client> clients = m_game->get_clients();
 
-        auto key = m_game->get_root()->get_child("Key");
+        auto key = m_game->get_object("Key");
+
+        if(key == nullptr)
+        {
+            return;
+        }
+
         auto key_collider = key->get_component<TriggerCollider>();
 
         for(int i = 0; i < clients.size(); i++)
         {
-            auto player = m_game->get_root()->get_child("Player_" + std::to_string(i));
+            auto player = m_game->get_object("Player_" + std::to_string(i));
             auto player_collider = player->get_component<Collider>();
             if(key_collider->collision(player_collider))
             {
-                auto door = m_game->get_root()->get_child("Door");
-                auto collider = door->get_component<Collider>();
-                collider->rect = { 0, 0 };
+                m_game->get_object("Door")->remove();
+                key->remove();
+                m_game->get_object("Ball")->remove();
             }
         }
     }
@@ -142,7 +148,18 @@ int game_test()
         auto sprite = box->add_component<Sprite>();
         sprite->pos = box_transform->pos;
         sprite->size = { 50, 50 };
-        sprite->name.s() = "player_" + std::to_string(i % 2 + 1) + ".png";
+        sprite->name.s() = "sprites/player_" + std::to_string(i % 2 + 1) + ".png";
+    }
+
+    {
+        auto ball = game.add_object("Ball");
+        auto ball_transform = ball->add_component<Transform>();
+        ball_transform->pos = { 50, 50 };
+        
+        auto sprite = ball->add_component<Sprite>();
+        sprite->pos = ball_transform->pos;
+        sprite->size = { 100, 100 };
+        sprite->name.s() = "sprites/ball.png";
     }
 
     {
@@ -185,9 +202,19 @@ int game_test()
                 if(type == "[DOOR]")
                 {
                     wall->set_name("Door");
+                    
+                    auto sprite = wall->add_component<Sprite>();
+                    sprite->pos = wall_transform->pos;
+                    sprite->size = wall_collider->rect;
+                    sprite->name.s() = "sprites/door.png";
                 } else if(type == "[KEY]")
                 {
                     wall->set_name("Key");
+                    
+                    auto sprite = wall->add_component<Sprite>();
+                    sprite->pos = wall_transform->pos;
+                    sprite->size = wall_collider->rect;
+                    sprite->name.s() = "sprites/key.png";
                 }
             } else {
                 warning("Unknown map object type \"" + type + "\"");

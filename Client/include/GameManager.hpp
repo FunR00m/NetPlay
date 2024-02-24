@@ -138,6 +138,10 @@ private:
     /// @brief Генерирует ответ для сервера
     /// @return Упакованные данные ответа
     PackedData create_response();
+
+    void unregister_object(long long object_id);
+
+    friend Object;
 };
 
 }

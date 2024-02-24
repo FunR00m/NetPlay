@@ -73,9 +73,25 @@ public:
     
     /// @brief Добавляет дочерний объект.
     ///
-    /// @returns  Указатель на новый объект
+    /// @returns Указатель на новый объект
     ///
     std::shared_ptr<Object> add_child();
+
+    /// @brief Удаляет дочерний объект и все его дочерние объекты
+    /// @param child_id Уникальный номер удаляемого объекта
+    ///
+    void remove_child(long long child_id);
+
+    /// @brief Удаляет дочерний объект и все его дочерние объекты
+    /// @param child_name Имя удаляемого объекта
+    ///
+    void remove_child(std::string child_name);
+
+    /// @brief Удаляет все дочерние объекты
+    void remove_children();
+
+    /// @brief Удаляет текущий объект
+    void remove();
     
     /// @brief Изменяет имя данного объекта.
     ///
@@ -100,20 +116,12 @@ public:
     /// данный объект корневой, то будет возвращён `nullptr`.
     std::shared_ptr<Object> get_parent();
     
-    /// @brief упакованные данные объекта и его компонентов.
+    /// @returns Упакованные данные объекта и его компонентов.
     PackedData pack();
     
     /// @brief изменения объекта и компонентов с прошлового вызова данного метода.
     PackedData fetch_changes();
 
-    /// @brief Распаковывает данные
-    /// @param data Упакованные данные
-    void unpack(PackedData data);
-
-    /// @brief Применяет изменения
-    /// @param data Упакованные данные
-    void apply_changes(PackedData data);
-    
 private:
     /// Словарь вида *имя типа компонента-указатель на него*
     std::unordered_map<std::string, std::shared_ptr<IComponent>> m_components;
@@ -178,11 +186,8 @@ private:
     /// @param child Указатель на объект, который нужно добавить.
     ///
     void register_child(std::shared_ptr<Object> child);
-
-    void deregister_child(long long child_id);
     
-    // GameManager должен иметь доступ к методам register_child и
-    // clear_child_name
+    // GameManager должен иметь доступ к методу register_child
     friend GameManager;
 
 };

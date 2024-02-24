@@ -48,6 +48,11 @@ public:
     /// - Parameter id: Уникальный номер искомого объекта
     ///
     std::shared_ptr<Object> get_object(long long id);
+
+    /// @brief Находит дочерний объект КОРНЕВОГО объекта
+    /// @param name Имя искомого объекта
+    /// @return Указатель на искомый объект
+    std::shared_ptr<Object> get_object(std::string name);
     
     /// Возвращает указатель на корневой объект.
     std::shared_ptr<Object> get_root();
@@ -76,7 +81,7 @@ public:
 
     /// @brief Удаляет объект и все его дочерние объекты
     /// @param object_id Уникальный номер удаляемого объекта
-    /// @note НЕ РАБОТАЕТ
+    ///
     void remove_object(long long object_id);
     
     /// @returns Массив всех объектов.
@@ -138,6 +143,15 @@ private:
 
     /// @brief Читает и обрабатывает ответы клиентов
     void read_responses();
+
+    /// @brief Удаляет объект из внутреннего индекса
+    /// @param object_id Уникальный номер объекта
+    /// @note Используется при удалении объектов
+    ///
+    void unregister_object(long long object_id);
+
+    // Класс Object должен иметь доступ к методу unregister_object
+    friend Object;
 };
 
 }
