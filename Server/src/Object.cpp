@@ -17,6 +17,8 @@ Object::Object(long long id, std::shared_ptr<Object> parent, GameManager* game_m
     m_id = id;
     m_parent = parent;
     m_game_manager = game_manager;
+
+    add_component<Transform>();
 }
 
 std::shared_ptr<IComponent> Object::get_component(const char* name)
@@ -28,6 +30,11 @@ std::shared_ptr<IComponent> Object::get_component(const char* name)
     }
     
     return m_components[name];
+}
+
+std::shared_ptr<Transform> Object::transform()
+{
+    return get_component<Transform>();
 }
 
 std::vector<std::shared_ptr<Object>> Object::get_children()

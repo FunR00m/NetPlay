@@ -88,16 +88,26 @@ public:
     /// Запускает системы и входит в игровой цикл.
     void start();
 
+    /// @brief Создаёт экземпляр компонента
+    /// @param name Зарегистрированное имя компонента
+    /// @return Указатель на созданный экземпляр компонента
     std::shared_ptr<IComponent> create_component(std::string name);
 
+    /// @brief Регистрирует компонент
+    /// @tparam T Тип компонента
+    /// @param name Имя компонента
+    /// @note Имена компонента на обеих сторонах должны совпадать.
     template<typename T>
     void register_component(std::string name)
     {
         m_component_manager->register_component<T>(name);
     }
 
+    /// @return Имя типа компонента, полученное с помощью typeid()
+    /// @param component_name Зарегистрированное имя компонента
     std::string get_component_type_name(std::string component_name);
 
+    /// @return Указатель на используемый контроллер
     std::shared_ptr<Controller> get_controller();
 
     /// @brief Останавливает все системы и модули
@@ -122,10 +132,13 @@ private:
     /// Массив всех систем
     std::vector<std::shared_ptr<ISystem>> m_systems;
     
+    /// @brief Указатель на сетевой модуль
     std::unique_ptr<INetworker> m_networker;
 
+    /// @brief Указатель на модуль управления компонентами
     std::shared_ptr<ComponentManager> m_component_manager;
 
+    /// @brief Указатель на текущий контроллер
     std::shared_ptr<Controller> m_controller;
     
     /// Функция главного игрового цикла.
@@ -139,8 +152,13 @@ private:
     /// @return Упакованные данные ответа
     PackedData create_response();
 
+    /// @brief Удаляет объект из внутреннего индекса
+    /// @param object_id Уникальный номер объекта
+    /// @note Используется при удалении объектов
+    ///
     void unregister_object(long long object_id);
 
+    // Класс Object должен иметь доступ к методу unregister_object
     friend Object;
 };
 

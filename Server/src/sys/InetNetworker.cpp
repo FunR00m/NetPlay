@@ -26,7 +26,7 @@ namespace sys
 InetNetworker::InetNetworker()
 {
     m_running = false;
-    m_max_client_id = 0;
+    m_max_client_id = -1;
     m_clients_count = 0;
     m_max_snapshot_id = 0;
 }

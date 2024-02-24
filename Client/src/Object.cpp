@@ -72,7 +72,7 @@ std::shared_ptr<Object> Object::add_child()
     return new_object;
 }
 
-std::shared_ptr<Object> Object::add_child(std::shared_ptr<Object> child)
+std::shared_ptr<Object> Object::register_child(std::shared_ptr<Object> child)
 {
     if(child->get_parent()->get_id() != m_id)
     {
@@ -87,6 +87,13 @@ std::shared_ptr<Object> Object::add_child(std::shared_ptr<Object> child)
     }
     
     return child;
+}
+
+void Object::clear_child_index()
+{
+    m_name_to_child.clear();
+    m_id_to_child.clear();
+    m_children.clear();
 }
 
 void Object::set_name(std::string name)
@@ -218,6 +225,16 @@ void Object::apply_changes(PackedData data)
 {
     fixme("[Object::apply_changes] stub");
     unpack(data);
+}
+
+IntField Object::get_parent_id()
+{
+    return m_parent_id;
+}
+
+void Object::set_parent(std::shared_ptr<Object> parent)
+{
+    this->parent = parent;
 }
 
 }

@@ -23,6 +23,8 @@
 #include "sys/InetNetworker.hpp"
 
 using namespace engine;
+        
+const int player_count = 2;
 
 class TestSystem : public ISystem
 {
@@ -36,14 +38,29 @@ public:
 	{
         std::vector<Client> clients = m_game->get_clients();
 
-        for(int i = 0; i < clients.size(); i++)
+        int player_speed = 15;
+
+        for(int i = 0; i < player_count; i++)
         {
             auto obj = m_game->get_root()->get_child("Player_" + std::to_string(i));
             std::shared_ptr<Transform> transform = obj->get_component<Transform>();
 
-            std::shared_ptr<Controller> controller = m_game->get_controller(clients[i].id);
+            std::shared_ptr<Controller> controller = nullptr;
             
-            int player_speed = 15;
+            for(Client client : clients)
+            {
+                if(client.id % player_count == i)
+                {
+                    controller = m_game->get_controller(client.id);
+                    break;
+                }
+            }
+
+            if(controller == nullptr)
+            {
+                continue;
+            }
+
             if(controller->get_state('w'))
             {
                 transform->motion.y = -player_speed;
@@ -91,7 +108,7 @@ public:
 
         auto key_collider = key->get_component<TriggerCollider>();
 
-        for(int i = 0; i < clients.size(); i++)
+        for(int i = 0; i < player_count; i++)
         {
             auto player = m_game->get_object("Player_" + std::to_string(i));
             auto player_collider = player->get_component<Collider>();
@@ -126,19 +143,18 @@ int game_test()
 
     {
         auto background = game.add_object("Background");
-        auto transform = background->add_component<Transform>();
-        transform->pos = { 0, 0 };
+        background->transform()->pos = { 0, 0 };
         auto sprite = background->add_component<Sprite>();
         sprite->name.s() = "sprites/level_1.png";
         sprite->size = { 800, 600 };
-        sprite->pos = transform->pos;
+        sprite->pos = background->transform()->pos;
     }
 
     for(int i = 0; i < 2; i++)
     {
         auto box = game.add_object("Player_" + std::to_string(i));
 
-        auto box_transform = box->add_component<Transform>();
+        auto box_transform = box->transform();
         box_transform->pos.x = 100 + 50 * (i % 10);
         box_transform->pos.y = 500 + 10 * (i / 10);
 
@@ -153,7 +169,7 @@ int game_test()
 
     {
         auto ball = game.add_object("Ball");
-        auto ball_transform = ball->add_component<Transform>();
+        auto ball_transform = ball->transform();
         ball_transform->pos = { 50, 50 };
         
         auto sprite = ball->add_component<Sprite>();
@@ -182,7 +198,7 @@ int game_test()
 
                 auto wall = game.add_object();
 
-                auto wall_transform = wall->add_component<Transform>();
+                auto wall_transform = wall->transform();
                 
                 map_file >> x >> y;
                 wall_transform->pos = { x, y };

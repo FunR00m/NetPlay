@@ -52,7 +52,7 @@ std::shared_ptr<Object> GameManager::add_object(long long parent_id)
     m_max_id += 1;
     auto new_object = std::make_shared<Object>(m_max_id, parent_id, this);
     m_id_to_object[m_max_id] = new_object;
-    m_id_to_object[parent_id]->add_child(new_object);
+    m_id_to_object[parent_id]->register_child(new_object);
     m_objects.push_back(new_object);
     
     return new_object;
@@ -174,6 +174,27 @@ void GameManager::unpack(PackedData data)
         // Создаём новый объект из данных пакета
         auto object = add_object();
         object->unpack(data.take());
+    }
+
+    // Обновляем индекс объектов
+    m_id_to_object.clear();
+    for(std::shared_ptr<Object> object : m_objects)
+    {
+        // Очищает индекс дочених объектов для следующей стадии
+        object->clear_child_index();
+
+        m_id_to_object[object->get_id()] = object;
+    }
+
+    // Обновляем указатели на родительские объекты
+    for(std::shared_ptr<Object> object : m_objects)
+    {
+        if(object->get_parent_id() == -1)
+        {
+            object->set_parent(nullptr);
+        } else {
+            object->set_parent(m_id_to_object[object->get_parent_id()]);
+        }
     }
 
     // Очищаем данные пакета

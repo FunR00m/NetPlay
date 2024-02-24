@@ -26,6 +26,7 @@
 #include "IComponent.hpp"
 #include "PackedData.hpp"
 #include "Fields.hpp"
+#include "Components/Transform.hpp"
 #include "utils/debug.hpp"
 
 namespace engine
@@ -45,6 +46,9 @@ public:
     {
         return std::dynamic_pointer_cast<T>(get_component(typeid(T).name()));
     }
+    
+    /// @returns Указатель на компонент Transform
+    std::shared_ptr<Transform> transform();
     
     template<typename T>
     /// @brief Добавляет в объект компонент данного типа и возвращает указатель на него.
