@@ -14,7 +14,6 @@ void MoveSystem::tick()
     for(auto obj : m_game_manager->get_objects())
     {
         auto transform = obj->get_component<Transform>();
-        auto sprite = obj->get_component<Sprite>();
         auto collider = obj->get_component<Collider>();
         if(!transform)
         {
@@ -42,11 +41,6 @@ void MoveSystem::tick()
                     collider->pos = transform->pos;
                 }
             }
-        }
-
-        if(sprite)
-        {
-            sprite->pos = transform->pos;
         }
     }
 }

@@ -1,4 +1,5 @@
 #include "Systems/RenderSystem.hpp"
+#include "Components/Transform.hpp"
 #include "GameManager.hpp"
 #include "IRenderer.hpp"
 #include "utils/debug.hpp"
@@ -29,6 +30,7 @@ void RenderSystem::tick()
             sprite->name.s() + std::string("' has not been loaded. Loading it."));
             load_texture(sprite->name);
         }
+        sprite->pos = object->get_component<Transform>()->pos;
         sprite->texture = m_textures[sprite->name];
 
         m_renderer.render_sprite(sprite);

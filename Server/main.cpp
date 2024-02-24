@@ -147,7 +147,6 @@ int game_test()
         auto sprite = background->add_component<Sprite>();
         sprite->name.s() = "sprites/level_1.png";
         sprite->size = { 800, 600 };
-        sprite->pos = background->transform()->pos;
     }
 
     for(int i = 0; i < 2; i++)
@@ -162,7 +161,6 @@ int game_test()
         box_collider->rect = { 50, 50 };
 
         auto sprite = box->add_component<Sprite>();
-        sprite->pos = box_transform->pos;
         sprite->size = { 50, 50 };
         sprite->name.s() = "sprites/player_" + std::to_string(i % 2 + 1) + ".png";
     }
@@ -173,7 +171,6 @@ int game_test()
         ball_transform->pos = { 50, 50 };
         
         auto sprite = ball->add_component<Sprite>();
-        sprite->pos = ball_transform->pos;
         sprite->size = { 100, 100 };
         sprite->name.s() = "sprites/ball.png";
     }
@@ -220,7 +217,6 @@ int game_test()
                     wall->set_name("Door");
                     
                     auto sprite = wall->add_component<Sprite>();
-                    sprite->pos = wall_transform->pos;
                     sprite->size = wall_collider->rect;
                     sprite->name.s() = "sprites/door.png";
                 } else if(type == "[KEY]")
@@ -228,7 +224,6 @@ int game_test()
                     wall->set_name("Key");
                     
                     auto sprite = wall->add_component<Sprite>();
-                    sprite->pos = wall_transform->pos;
                     sprite->size = wall_collider->rect;
                     sprite->name.s() = "sprites/key.png";
                 }
@@ -236,6 +231,11 @@ int game_test()
                 warning("Unknown map object type \"" + type + "\"");
             }
         }
+    }
+
+    {
+        auto key = game.get_object("Key");
+        debug(std::to_string(key->transform()->pos.x));
     }
     
     game.start();
