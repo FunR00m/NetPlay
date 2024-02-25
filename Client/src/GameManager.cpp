@@ -219,8 +219,6 @@ void GameManager::game_loop()
 
 void GameManager::unpack(PackedData data)
 {
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-
     // Проверяем, пуст ли пакет. Если да, то значит, что
     // ответ ещё не пришёл и распаковывать его не нужно.
     if(data.size() == 0)
@@ -264,12 +262,6 @@ void GameManager::unpack(PackedData data)
 
     // Очищаем данные пакета
     data.clear();
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-
-    debug("Time difference = " +
-        std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()));
-    debug("Object count = " + std::to_string(m_objects.size()));
 }
 
 PackedData GameManager::create_response()

@@ -16,6 +16,7 @@ public:
     StringField name;
     Vec2Field size;
     Vec2Field pos;
+    IntField z_layer;
     std::shared_ptr<ITexture> texture;
     
     Sprite();

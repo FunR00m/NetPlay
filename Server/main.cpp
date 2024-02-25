@@ -116,7 +116,7 @@ public:
             {
                 m_game->get_object("Door")->remove();
                 key->remove();
-                m_game->get_object("Ball")->remove();
+                m_game->get_object("Ball")->get_component<Sprite>()->z_layer = 2;
             }
         }
     }
@@ -147,6 +147,7 @@ int game_test()
         auto sprite = background->add_component<Sprite>();
         sprite->name.s() = "sprites/level_1.png";
         sprite->size = { 800, 600 };
+        sprite->z_layer = -1;
     }
 
     for(int i = 0; i < 2; i++)
@@ -163,6 +164,7 @@ int game_test()
         auto sprite = box->add_component<Sprite>();
         sprite->size = { 50, 50 };
         sprite->name.s() = "sprites/player_" + std::to_string(i % 2 + 1) + ".png";
+        sprite->z_layer = 3;
     }
 
     {
@@ -173,6 +175,7 @@ int game_test()
         auto sprite = ball->add_component<Sprite>();
         sprite->size = { 100, 100 };
         sprite->name.s() = "sprites/ball.png";
+        sprite->z_layer = 4;
     }
 
     {
@@ -219,6 +222,7 @@ int game_test()
                     auto sprite = wall->add_component<Sprite>();
                     sprite->size = wall_collider->rect;
                     sprite->name.s() = "sprites/door.png";
+                    sprite->z_layer = 2;
                 } else if(type == "[KEY]")
                 {
                     wall->set_name("Key");
@@ -226,6 +230,7 @@ int game_test()
                     auto sprite = wall->add_component<Sprite>();
                     sprite->size = wall_collider->rect;
                     sprite->name.s() = "sprites/key.png";
+                    sprite->z_layer = 2;
                 }
             } else {
                 warning("Unknown map object type \"" + type + "\"");

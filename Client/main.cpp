@@ -113,6 +113,7 @@ int game_test()
         auto sprite = menu->add_component<Sprite>();
         sprite->size = { 800, 600 };
         sprite->name.s() = "sprites/Menu 2.png";
+        sprite->z_layer = 0;
     }
 
     {
@@ -124,6 +125,7 @@ int game_test()
         auto sprite = selector->add_component<Sprite>();
         sprite->size = { 250, 78 };
         sprite->name.s() = "sprites/menu_selector.png";
+        sprite->z_layer = 1;
     }
 
     {
@@ -135,6 +137,7 @@ int game_test()
         auto sprite = selector->add_component<Sprite>();
         sprite->size = { 800, 600 };
         sprite->name.s() = "sprites/menu_about.png";
+        sprite->z_layer = 2;
     }
 
     game_manager.start();

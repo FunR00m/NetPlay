@@ -13,6 +13,7 @@ class Sprite : public IComponent
 public:
     StringField name;
     Vec2Field size;
+    IntField z_layer;
     
     Sprite();
 
