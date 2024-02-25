@@ -35,16 +35,18 @@ public:
     {
         if(!m_game->is_connected())
         {
-            if(m_game->get_controller()->get_state(SDLK_SPACE))
+            if(m_game->get_controller()->get_state(SDLK_RETURN))
             {
-                m_game->get_controller()->set_state(SDLK_SPACE, false);
+                m_game->get_controller()->set_state(SDLK_RETURN, false);
 
                 if(about)
                 {
                     about = false;
                 } else if(selection == 0)
                 {
+                    m_game->get_client_root()->remove_children();
                     m_game->connect("localhost:8001");
+                    return;
                 } else if(selection == 1)
                 {
                     about = true;
@@ -54,7 +56,7 @@ public:
                 }
             }
 
-            auto about_obj = m_game->get_root()->get_child("About");
+            auto about_obj = m_game->get_client_root()->get_child("About");
             if(about)
             {
                 about_obj->get_component<Transform>()->pos = { 0, 0 };
@@ -74,7 +76,7 @@ public:
                     selection = selection % 3;
                 }
 
-                auto selector = m_game->get_root()->get_child("Selector");
+                auto selector = m_game->get_client_root()->get_child("Selector");
                 auto transform = selector->get_component<Transform>();
                 transform->pos = {275, 225 + selection * 86 };
             }
@@ -103,7 +105,7 @@ int game_test()
     game_manager.add_system(std::make_shared<RenderSystem>());
 
     {
-        auto menu = game_manager.add_object("Menu");
+        auto menu = game_manager.add_client_object("Menu");
 
         auto transform = menu->add_component<Transform>();
         transform->pos = { 0, 0 };
@@ -114,7 +116,7 @@ int game_test()
     }
 
     {
-        auto selector = game_manager.add_object("Selector");
+        auto selector = game_manager.add_client_object("Selector");
 
         auto transform = selector->add_component<Transform>();
         transform->pos = { 275, 225 };
@@ -125,7 +127,7 @@ int game_test()
     }
 
     {
-        auto selector = game_manager.add_object("About");
+        auto selector = game_manager.add_client_object("About");
 
         auto transform = selector->add_component<Transform>();
         transform->pos = { 800, 0 };

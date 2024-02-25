@@ -61,6 +61,13 @@ std::shared_ptr<Object> Object::add_child()
     return new_object;
 }
 
+std::shared_ptr<Object> Object::add_child(std::string name)
+{
+    std::shared_ptr<Object> child = add_child();
+    child->set_name(name);
+    return child;
+}
+
 void Object::remove_child(long long child_id)
 {
     if(m_id_to_child.count(child_id) == 0)

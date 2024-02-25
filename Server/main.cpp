@@ -154,7 +154,7 @@ int game_test()
         auto box = game.add_object("Player_" + std::to_string(i));
 
         auto box_transform = box->transform();
-        box_transform->pos.x = 100 + 50 * (i % 10);
+        box_transform->pos.x = 50 + 50 * (i % 10);
         box_transform->pos.y = 500 + 10 * (i / 10);
 
         auto box_collider = box->add_component<Collider>();

@@ -38,6 +38,9 @@
 namespace engine
 {
 
+const long long server_root_id = 0;
+const long long client_root_id = 4096;
+
 class GameManager
 {
 public:
@@ -49,17 +52,23 @@ public:
     ///
     std::shared_ptr<Object> get_object(long long id);
     
-    /// Возвращает указатель на корневой объект.
-    std::shared_ptr<Object> get_root();
+    /// @returns Указатель на корневой объект сервера
+    std::shared_ptr<Object> get_server_root();
     
-    /// Добавляет дочерний объект корневому объекту.
-    std::shared_ptr<Object> add_object();
+    /// @returns Указатель на корневой объект клиента
+    std::shared_ptr<Object> get_client_root();
     
-    /// Добавляет дочерний объект с данным именем корневому объекту.
+    /// Добавляет дочерний объект корневому объекту сервера
+    std::shared_ptr<Object> add_server_object();
+    
+    /// Добавляет дочерний объект корневому объекту клиента
+    std::shared_ptr<Object> add_client_object();
+    
+    /// Добавляет дочерний объект с данным именем корневому объекту клиента.
     ///
     /// - Parameter name: Имя нового объекта
     ///
-    std::shared_ptr<Object> add_object(std::string name);
+    std::shared_ptr<Object> add_client_object(std::string name);
     
     /// Добавляет дочерний объект объекту с данным номером.
     ///
@@ -130,16 +139,19 @@ private:
     /// Массив всех объектов
     std::vector<std::shared_ptr<Object>> m_objects;
     
-    /// Указатель на корневой объект
-    std::shared_ptr<Object> m_root;
+    /// Указатель на корневой объект сервера
+    std::shared_ptr<Object> m_server_root;
     
-    /// Максимальный занятый номер объекта
+    /// Указатель на корневой объект клиента
+    std::shared_ptr<Object> m_client_root;
+    
+    /// Максимальный занятый номер объекта на стороне клиента
     long long m_max_id;
     
     /// Запущена ли игра
     bool m_running;
 
-    /// Подключено ли к серверу
+    /// Подключен ли клиент к серверу
     bool m_connected;
     
     /// Массив всех систем

@@ -19,8 +19,12 @@ Object::Object(long long id, long long parent_id, GameManager* game_manager)
     m_game_manager = game_manager;
 }
 
-Object::Object(PackedData data)
+Object::Object(PackedData data, GameManager* game_manager)
 {
+    m_game_manager = game_manager;
+    unpack(data);
+
+    /*
     m_id.unpack(data.take());
     m_name = data.take().data();
     m_parent_id.unpack(data.take());
@@ -35,6 +39,7 @@ Object::Object(PackedData data)
         PackedData component_data = data.take();
         component->unpack(component_data);
     }    
+    */
 }
 
 std::shared_ptr<IComponent> Object::get_component(std::string name)
@@ -72,21 +77,84 @@ std::shared_ptr<Object> Object::add_child()
     return new_object;
 }
 
-std::shared_ptr<Object> Object::register_child(std::shared_ptr<Object> child)
+std::shared_ptr<Object> Object::add_child(std::string name)
+{
+    std::shared_ptr<Object> child = add_child();
+    child->set_name(name);
+    return child;
+}
+
+void Object::remove_child(long long child_id)
+{
+    if(m_id_to_child.count(child_id) == 0)
+    {
+        error("[Object::remove_child] Unable to find the child with given id");
+        return;
+    }
+
+    std::shared_ptr<Object> child_ptr = m_id_to_child[child_id];
+
+    child_ptr->remove_children();
+    
+    m_name_to_child.erase(child_ptr->get_name());
+    m_id_to_child.erase(child_id);
+
+    for(long long i = 0; i < m_children.size(); i++)
+    {
+        if(m_children[i]->get_id() == child_id)
+        {
+            m_children.erase(m_children.begin() + i);
+            break;
+        }
+    }
+
+    m_game_manager->unregister_object(child_id);
+}
+
+void Object::remove_child(std::string child_name)
+{
+    if(m_name_to_child.count(child_name) == 0)
+    {
+        error("[Object::remove_child] Unable to find the child with given name");
+        return;
+    }
+
+    remove_child(m_name_to_child[child_name]->get_id());
+}
+
+void Object::remove_children()
+{
+    for(long long i = m_children.size() - 1; i >= 0; i--)
+    {
+        remove_child(m_children[i]->get_id());
+    }
+}
+
+void Object::remove()
+{
+    if(m_parent == nullptr)
+    {
+        error("[Object::remove] Cannot remove root");
+        return;
+    }
+
+    m_parent->remove_child(m_id);
+}
+
+void Object::register_child(std::shared_ptr<Object> child)
 {
     if(child->get_parent()->get_id() != m_id)
     {
-        error("[Object::add_child(child)] Current ID and child's ID does not match! Current object ID: " + std::to_string(m_id));
-        return nullptr;
+        error("[Object::add_child(child)] Current ID and child's parent's ID does not match! Current object ID: " + std::to_string(m_id));
+        return;
     }
+
     m_children.push_back(child);
     m_id_to_child[child->get_id()] = child;
     if(!child->get_name().empty())
     {
         m_name_to_child[child->get_name()] = child;
     }
-    
-    return child;
 }
 
 void Object::clear_child_index()
@@ -124,13 +192,13 @@ void Object::set_child_name(long long id, std::string name)
         return;
     }
     
-    std::shared_ptr<Object> child = m_id_to_child[id];
-    
     if(m_name_to_child.find(name) != m_name_to_child.end())
     {
         warning(std::string("[Object::set_child_name(" + std::to_string(id) + ", \"") + std::string(name) + std::string("\")] Child with given name already exists. Clearing its name. Current object ID: " + std::to_string(m_id)));
         m_name_to_child[name]->clear_name();
     }
+    
+    std::shared_ptr<Object> child = m_id_to_child[id];
     
     m_name_to_child.erase(child->get_name());
     m_name_to_child[name] = child;
@@ -237,7 +305,7 @@ IntField Object::get_parent_id()
 
 void Object::set_parent(std::shared_ptr<Object> parent)
 {
-    this->parent = parent;
+    m_parent = parent;
 }
 
 }

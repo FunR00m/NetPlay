@@ -40,7 +40,8 @@ public:
     
     /// @brief Создаёт объект из упакованных данных.
     /// @param data Упакованные данные объекта
-    Object(PackedData data);
+    /// @param game_manager Указатель на менеджер игры
+    Object(PackedData data, GameManager* game_manager);
     
     template<typename T>
     /// @brief Возвращает указатель на компонент данного типа. Если такового нет
@@ -80,6 +81,30 @@ public:
     /// @returns  Указатель на новый объект
     ///
     std::shared_ptr<Object> add_child();
+
+    /// @brief Добавляет дочерний объект.
+    ///
+    /// @param name Имя нового объекта
+    /// @returns Указатель на новый объект. Если объект с данным
+    /// именем уже существует, возвращает ```nullptr```.
+    ///
+    std::shared_ptr<Object> add_child(std::string name);
+
+    /// @brief Удаляет дочерний объект и все его дочерние объекты
+    /// @param child_id Уникальный номер удаляемого объекта
+    ///
+    void remove_child(long long child_id);
+
+    /// @brief Удаляет дочерний объект и все его дочерние объекты
+    /// @param child_name Имя удаляемого объекта
+    ///
+    void remove_child(std::string child_name);
+
+    /// @brief Удаляет все дочерние объекты
+    void remove_children();
+
+    /// @brief Удаляет текущий объект
+    void remove();
     
     /// @brief Изменяет имя данного объекта.
     ///
@@ -133,7 +158,7 @@ private:
     
     /// @brief Указатель на родительский объект
     /// @note Можно использовать только после этапа распаковки.
-    std::shared_ptr<Object> parent;
+    std::shared_ptr<Object> m_parent;
 
     /// @brief Уникальный номер родительского объекта. Если данный
     /// объект -- корневой, то принимает значение -1.
@@ -191,16 +216,14 @@ private:
     /// @note Не рекомендуется использовать после этапа распаковки
     IntField get_parent_id();
 
-    /// @brief Добавляет дочерний объект по указателю.
+    /// @brief Добавляет дочерний объект во внутренний индекс
     ///
     /// @note Вызывается только из метода `GameObject::add_object()`. Добавляет
     /// дочерний объект во внутренний индекс.
     ///
     /// @param child Указатель на объект, который нужно добавить.
     ///
-    /// @returns  Указатель на новый объект
-    ///
-    std::shared_ptr<Object> register_child(std::shared_ptr<Object> child);
+    void register_child(std::shared_ptr<Object> child);
 
     /// @brief Очищает индекс дочерних объектов
     void clear_child_index();
