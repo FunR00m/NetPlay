@@ -102,6 +102,23 @@ void GameManager::add_system(std::shared_ptr<ISystem> system)
     m_systems.push_back(system);
 }
 
+void GameManager::connect(std::string adress)
+{
+    m_networker->connect(adress);
+    m_connected = true;
+}
+
+void GameManager::disconnect()
+{
+    m_networker->disconnect();
+    m_connected = false;
+}
+
+bool GameManager::is_connected()
+{
+    return m_connected;
+}
+
 void GameManager::start()
 {
     // Запускаем все системы
@@ -111,7 +128,7 @@ void GameManager::start()
     }
     
     // Подключаемся к серверу
-    m_networker->connect("localhost:8001");
+    // connect("localhost:8001");
 
     // Запускаем игровой цикл
     m_running = true;
@@ -122,11 +139,18 @@ void GameManager::game_loop()
 {
     while(m_running)
     {
-        // Получаем пакет с сервера
-        PackedData snapshot = m_networker->receive_snapshot();
-        
-        // Распаковываем пакет
-        unpack(snapshot);
+        // Объявляем буфер для принимаемый пакетов
+        PackedData snapshot;
+
+        // Если выполнено подключение к серверу
+        if(m_connected)
+        {
+            // Получаем пакет с сервера
+            snapshot = m_networker->receive_snapshot();
+            
+            // Распаковываем пакет
+            unpack(snapshot);
+        }
 
         // Запускаем итерацию каждой системы
         for(std::shared_ptr<ISystem> system : m_systems)
@@ -143,7 +167,7 @@ void GameManager::game_loop()
         }
 
         // Проверяем, пришел ли пакет с сервера
-        if(snapshot.size() > 0)
+        if(m_connected && (snapshot.size() > 0))
         {
             // Создаём и отправляем ответ серверу
             m_networker->send_response(create_response());
@@ -240,7 +264,10 @@ void GameManager::stop()
         system->stop();
     }
 
-    m_networker->disconnect();
+    if(m_connected)
+    {
+        disconnect();
+    }
 }
 
 }

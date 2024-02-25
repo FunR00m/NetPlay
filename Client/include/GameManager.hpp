@@ -112,6 +112,16 @@ public:
 
     /// @brief Останавливает все системы и модули
     void stop();
+
+    /// @brief Подключает к серверу
+    /// @param adress Адрес сервера
+    void connect(std::string adress);
+
+    /// @brief Отключает от сервера
+    void disconnect();
+
+    /// @return Подключен ли клиент к серверу
+    bool is_connected();
     
 private:
     /// Словарь вида *номер объекта-объект*
@@ -128,6 +138,9 @@ private:
     
     /// Запущена ли игра
     bool m_running;
+
+    /// Подключено ли к серверу
+    bool m_connected;
     
     /// Массив всех систем
     std::vector<std::shared_ptr<ISystem>> m_systems;

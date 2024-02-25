@@ -41,7 +41,7 @@ public:
     /// - Parameter title: The new title
     void set_window_title(std::string title) override;
 
-    /// XXX Is the quit event caught
+    /// Is the quit event caught
     bool is_quit() override;
     
 private:

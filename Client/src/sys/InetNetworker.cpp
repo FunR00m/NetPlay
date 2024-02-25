@@ -102,7 +102,7 @@ void InetNetworker::talk_loop()
         // Проверяем, содержит ли пакет данные
         if(snapshot.size() == 0)
         {
-            debug("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
+            warning("[InetNetworker::talk_loop()] Received zero sized snapshot. Disconnecting.");
             m_running = false;
             break;
         }

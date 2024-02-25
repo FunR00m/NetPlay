@@ -232,11 +232,6 @@ int game_test()
             }
         }
     }
-
-    {
-        auto key = game.get_object("Key");
-        debug(std::to_string(key->transform()->pos.x));
-    }
     
     game.start();
     
