@@ -14,6 +14,7 @@ public:
     StringField name;
     Vec2Field size;
     IntField z_layer;
+    BoolField visible;
     
     Sprite();
 

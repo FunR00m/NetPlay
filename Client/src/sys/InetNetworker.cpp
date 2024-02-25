@@ -61,7 +61,7 @@ void InetNetworker::connect(std::string address)
 
 void InetNetworker::disconnect()
 {
-    if(!m_running)
+    if(m_running)
     {
         m_running = false;
         m_talk_thread->join();
@@ -115,7 +115,12 @@ void InetNetworker::talk_loop()
         // Ждём пока появятся ответы в списке ответов
         // FIXME Изменить реализацию с помощью std::condition_variable
         // 
-        while(m_responses_size == 0);
+        while((m_responses_size == 0) && (m_running));
+
+        if(!m_running)
+        {
+            break;
+        }
 
         // Копируем ответ в буфер
         m_responses_mtx.lock();

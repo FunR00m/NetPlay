@@ -34,13 +34,16 @@ void RenderSystem::tick()
             }
 
             // Устанавливаем координаты спрайта
-            sprite->pos = object->get_component<Transform>()->pos;
+            sprite->pos = object->get_absolute_transform().pos;
             
             // Устанавливаем текстуру спрайта
             sprite->texture = m_textures[sprite->name];
 
-            // Добавляем спрайт в очередь
-            render_queue.push_back(sprite);
+            // Добавляем спрайт в очередь, если он видим
+            if(sprite->visible)
+            {
+                render_queue.push_back(sprite);
+            }
         }
     }
 

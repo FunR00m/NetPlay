@@ -17,6 +17,8 @@ Object::Object(long long id, long long parent_id, GameManager* game_manager)
     m_id = id;
     m_parent_id = parent_id;
     m_game_manager = game_manager;
+    m_parent = m_game_manager->get_object(parent_id);
+    add_component<Transform>();
 }
 
 Object::Object(PackedData data, GameManager* game_manager)
@@ -51,6 +53,25 @@ std::shared_ptr<IComponent> Object::get_component(std::string name)
     }
 
     return m_components[name];
+}
+
+std::shared_ptr<Transform> Object::transform()
+{
+    return get_component<Transform>();
+}
+
+Transform Object::get_absolute_transform()
+{
+    if(m_parent == nullptr)
+    {
+        return *transform();
+    } else {
+        Transform ans = *transform();
+        Transform parent_ans = m_parent->get_absolute_transform();
+        ans.pos += parent_ans.pos;
+        ans.motion += parent_ans.motion;
+        return ans;
+    }
 }
 
 std::vector<std::shared_ptr<Object>> Object::get_children()

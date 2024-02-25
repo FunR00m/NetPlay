@@ -7,6 +7,7 @@ Sprite::Sprite()
 {
     name = std::string("Empty");
     size = { 100, 100 };
+    visible = true;
 }
 
 PackedData Sprite::pack()
@@ -15,6 +16,7 @@ PackedData Sprite::pack()
     data += name.pack();
     data += size.pack();
     data += z_layer.pack();
+    data += visible.pack();
     return data;
 }
 
@@ -24,6 +26,7 @@ PackedData Sprite::fetch_changes()
     data += name.fetch_changes();
     data += size.fetch_changes();
     data += z_layer.fetch_changes();
+    data += visible.fetch_changes();
     return data;
 }
 
@@ -32,6 +35,7 @@ void Sprite::unpack(PackedData data)
     name.unpack(data.take());
     size.unpack(data.take());
     z_layer.unpack(data.take());
+    visible.unpack(data.take());
 }
 
 void Sprite::apply_changes(PackedData data)
@@ -39,6 +43,7 @@ void Sprite::apply_changes(PackedData data)
     name.apply_changes(data.take());
     size.apply_changes(data.take());
     z_layer.apply_changes(data.take());
+    visible.apply_changes(data.take());
 }
 
 std::string Sprite::get_name()

@@ -17,6 +17,7 @@ public:
     Vec2Field size;
     Vec2Field pos;
     IntField z_layer;
+    BoolField visible;
     std::shared_ptr<ITexture> texture;
     
     Sprite();

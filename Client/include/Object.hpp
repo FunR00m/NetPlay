@@ -26,6 +26,7 @@
 #include "IComponent.hpp"
 #include "PackedData.hpp"
 #include "Fields.hpp"
+#include "Components/Transform.hpp"
 #include "utils/debug.hpp"
 
 namespace engine
@@ -36,6 +37,11 @@ class GameManager;
 class Object
 {
 public:
+    /// @brief Создаёт объект для стороны клиента
+    /// @param id Уникальный номер
+    /// @param parent_id Уникальный номер родительского объекта. Если
+    /// данный объект - корневой, то -1.
+    /// @param game_manager Указатель на менеджер игры
     Object(long long id, long long parent_id, GameManager* game_manager);
     
     /// @brief Создаёт объект из упакованных данных.
@@ -50,6 +56,14 @@ public:
     {
         return std::dynamic_pointer_cast<T>(get_component(typeid(T).name()));
     }
+
+    /// @returns Указатель на компонент Transform
+    std::shared_ptr<Transform> transform();
+
+    /// @brief Вычисляет абсолютную характеристику ```Transform```
+    /// @return Объект типа ```Transform``` с абсолютной информацией
+    /// о положении
+    Transform get_absolute_transform();
     
     template<typename T>
     /// @brief Добавляет в объект компонент данного типа и возвращает указатель на него.
