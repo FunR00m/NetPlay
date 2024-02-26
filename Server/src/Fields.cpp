@@ -193,7 +193,7 @@ StringField::StringField(std::string string)
     m_string = string;
 }
 
-StringField::operator std::__1::string()
+StringField::operator std::string()
 {
     return m_string;
 }
