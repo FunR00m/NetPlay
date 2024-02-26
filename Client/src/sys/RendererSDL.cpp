@@ -24,7 +24,7 @@ void RendererSDL::setup()
     m_quit = false;
 }
 
-void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
+void RendererSDL::handle_events(std::shared_ptr<Keyboard> keyboard)
 {
     SDL_Event sdl_event;
     while(SDL_PollEvent(&sdl_event))
@@ -32,10 +32,10 @@ void RendererSDL::handle_events(std::shared_ptr<Controller> controller)
         switch(sdl_event.type)
         {
             case SDL_KEYDOWN:
-                controller->press(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
+                keyboard->press(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
                 break;
             case SDL_KEYUP:
-                controller->release(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
+                keyboard->release(SDL_GetKeyFromScancode(sdl_event.key.keysym.scancode));
                 break;
             case SDL_QUIT:
                 // fixme("core::sys::RendererSDL::poll_events() SDL_QUIT event has not been implemented yet.");

@@ -26,7 +26,7 @@ public:
     void setup() override;
     
     /// Handles system events such as key presses or mouse clicks.
-    void handle_events(std::shared_ptr<Controller> controller) override;
+    void handle_events(std::shared_ptr<Keyboard> keyboard) override;
     
     /// Renders the given sprite.
     virtual void render_sprite(std::shared_ptr<Sprite> sprite) override;

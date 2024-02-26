@@ -195,5 +195,10 @@ PackedData InetNetworker::read_data(int socket)
     return data;
 }
 
+InetNetworker::~InetNetworker()
+{
+    disconnect();
+}
+
 }
 }

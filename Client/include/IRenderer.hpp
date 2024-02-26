@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "Components/Sprite.hpp"
-#include "Controller.hpp"
+#include "Keyboard.hpp"
 
 namespace engine
 {
@@ -16,7 +16,7 @@ public:
     /// Sets the renderer up, for example creates the window.
     virtual void setup() = 0;
     
-    virtual void handle_events(std::shared_ptr<Controller> controller) = 0;
+    virtual void handle_events(std::shared_ptr<Keyboard> keyboard) = 0;
 
     /// Renders the given sprite.
     virtual void render_sprite(std::shared_ptr<Sprite> sprite) = 0;

@@ -32,6 +32,7 @@ add_executable(Client
         src/sys/RendererSDL.cpp
         src/ComponentManager.cpp
         src/Controller.cpp
+        src/Keyboard.cpp
 )
 
 # Добавляем необходимые библиотеки, если нужно

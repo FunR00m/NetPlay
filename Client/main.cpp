@@ -16,7 +16,10 @@
 #include "Components/Sprite.hpp"
 #include "Components/NullComp.hpp"
 
+#include "Controls.hpp"
+
 #include "Systems/RenderSystem.hpp"
+
 
 using namespace engine;
 
@@ -37,9 +40,9 @@ public:
         if(status == 0)
         {
             auto menu = m_game->get_client_root()->get_child("Menu");
-            if(m_game->get_controller()->get_state(SDLK_RETURN))
+            if(m_game->get_keyboard()->get_state(SDLK_RETURN))
             {
-                m_game->get_controller()->set_state(SDLK_RETURN, false);
+                m_game->get_keyboard()->set_state(SDLK_RETURN, false);
 
                 if(about)
                 {
@@ -66,15 +69,15 @@ public:
             } else {
                 about_obj->get_component<Transform>()->pos = { 800, 0 };
 
-                if(m_game->get_controller()->get_state(SDLK_UP))
+                if(m_game->get_keyboard()->get_state(SDLK_UP))
                 {
-                    m_game->get_controller()->set_state(SDLK_UP, false);
+                    m_game->get_keyboard()->set_state(SDLK_UP, false);
                     selection -= 1;
                     selection = (selection + 3) % 3;
                 }
-                if(m_game->get_controller()->get_state(SDLK_DOWN))
+                if(m_game->get_keyboard()->get_state(SDLK_DOWN))
                 {
-                    m_game->get_controller()->set_state(SDLK_DOWN, false);
+                    m_game->get_keyboard()->set_state(SDLK_DOWN, false);
                     selection += 1;
                     selection = selection % 3;
                 }
@@ -84,9 +87,9 @@ public:
             }
         } else if(status == 1)
         {
-            if(m_game->get_controller()->get_state(SDLK_ESCAPE))
+            if(m_game->get_keyboard()->get_state(SDLK_ESCAPE))
             {
-                m_game->get_controller()->set_state(SDLK_ESCAPE, false);
+                m_game->get_keyboard()->set_state(SDLK_ESCAPE, false);
                 show_pause();
                 selection = 0;
                 status = 2;
@@ -94,15 +97,15 @@ public:
         } else if(status == 2)
         {
             auto pause = m_game->get_client_root()->get_child("Pause");
-            if(m_game->get_controller()->get_state(SDLK_ESCAPE))
+            if(m_game->get_keyboard()->get_state(SDLK_ESCAPE))
             {
-                m_game->get_controller()->set_state(SDLK_ESCAPE, false);
+                m_game->get_keyboard()->set_state(SDLK_ESCAPE, false);
                 hide_pause();
                 status = 1;
             }
-            if(m_game->get_controller()->get_state(SDLK_RETURN))
+            if(m_game->get_keyboard()->get_state(SDLK_RETURN))
             {
-                m_game->get_controller()->set_state(SDLK_RETURN, false);
+                m_game->get_keyboard()->set_state(SDLK_RETURN, false);
 
                 if(selection == 0)
                 {
@@ -128,15 +131,15 @@ public:
                 }
             }
 
-            if(m_game->get_controller()->get_state(SDLK_UP))
+            if(m_game->get_keyboard()->get_state(SDLK_UP))
             {
-                m_game->get_controller()->set_state(SDLK_UP, false);
+                m_game->get_keyboard()->set_state(SDLK_UP, false);
                 selection -= 1;
                 selection = (selection + 4) % 4;
             }
-            if(m_game->get_controller()->get_state(SDLK_DOWN))
+            if(m_game->get_keyboard()->get_state(SDLK_DOWN))
             {
-                m_game->get_controller()->set_state(SDLK_DOWN, false);
+                m_game->get_keyboard()->set_state(SDLK_DOWN, false);
                 selection += 1;
                 selection = selection % 4;
             }
@@ -201,10 +204,21 @@ int game_test()
     game_manager.register_component<Transform>("Transform");
     game_manager.register_component<Sprite>("Sprite");
     game_manager.register_component<NullComp>("Collider");
+    game_manager.register_component<NullComp>("TriggerCollider");
     // game_manager.register_component<NullComp>("TriggerCollider");
 
     game_manager.add_system(std::make_shared<MenuSystem>());
     game_manager.add_system(std::make_shared<RenderSystem>());
+
+    game_manager.get_keyboard()->assign_control('w', C_Up);
+    game_manager.get_keyboard()->assign_control('s', C_Down);
+    game_manager.get_keyboard()->assign_control('d', C_Right);
+    game_manager.get_keyboard()->assign_control('a', C_Left);
+
+    game_manager.get_keyboard()->assign_control('k', C_Up);
+    game_manager.get_keyboard()->assign_control('j', C_Down);
+    game_manager.get_keyboard()->assign_control('l', C_Right);
+    game_manager.get_keyboard()->assign_control('h', C_Left);
 
     auto menu = game_manager.add_client_object("Menu");
     {

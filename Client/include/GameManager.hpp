@@ -34,6 +34,7 @@
 #include "INetworker.hpp"
 #include "ComponentManager.hpp"
 #include "Controller.hpp"
+#include "Keyboard.hpp"
 
 namespace engine
 {
@@ -119,6 +120,9 @@ public:
     /// @return Указатель на используемый контроллер
     std::shared_ptr<Controller> get_controller();
 
+    /// @return Указатель на используемую клавиатуру
+    std::shared_ptr<Keyboard> get_keyboard();
+
     /// @brief Останавливает все системы и модули
     void stop();
 
@@ -165,6 +169,9 @@ private:
 
     /// @brief Указатель на текущий контроллер
     std::shared_ptr<Controller> m_controller;
+
+    /// @brief Указатель на клавиатуру
+    std::shared_ptr<Keyboard> m_keyboard;
     
     /// Функция главного игрового цикла.
     void game_loop();

@@ -26,6 +26,8 @@ class InetNetworker : public INetworker
 public:
     InetNetworker();
 
+    ~InetNetworker();
+
     /// @brief Подключается к серверу по данному адресу
     /// @param address Адрес сервера
     /// @note Чтение адреса не реализовано. Подключается к

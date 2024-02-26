@@ -38,6 +38,9 @@ GameManager::GameManager()
 
     // Создаём экземпляр контроллера
     m_controller = std::make_shared<Controller>();
+
+    // Создаём экземпляр клавиатуры
+    m_keyboard = std::make_shared<Keyboard>(m_controller);
     
     m_running = false;
 }
@@ -116,7 +119,7 @@ std::shared_ptr<Object> GameManager::get_object(long long id)
 {
     if(m_id_to_object.find(id) == m_id_to_object.end())
     {
-        warning("[GameManager::get_object] Object with given ID was not found.");
+        // warning("[GameManager::get_object] Object with given ID was not found.");
         return nullptr;
     } else {
         return m_id_to_object[id];
@@ -289,6 +292,11 @@ std::string GameManager::get_component_type_name(std::string component_name)
 std::shared_ptr<Controller> GameManager::get_controller()
 {
     return m_controller;
+}
+
+std::shared_ptr<Keyboard> GameManager::get_keyboard()
+{
+    return m_keyboard;
 }
 
 void GameManager::stop()

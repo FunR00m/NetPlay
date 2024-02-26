@@ -62,7 +62,7 @@ void RenderSystem::tick()
     }
 
     m_renderer.refresh();
-    m_renderer.handle_events(m_game->get_controller());
+    m_renderer.handle_events(m_game->get_keyboard());
 
     if(m_renderer.is_quit())
     {

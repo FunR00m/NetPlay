@@ -20,6 +20,8 @@
 #include "Components/TriggerCollider.hpp"
 #include "Systems/MoveSystem.hpp"
 
+#include "Controls.hpp"
+
 #include "sys/InetNetworker.hpp"
 
 using namespace engine;
@@ -61,20 +63,20 @@ public:
                 continue;
             }
 
-            if(controller->get_state('w'))
+            if(controller->get_state(C_Up))
             {
                 transform->motion.y = -player_speed;
-            } else if(controller->get_state('s'))
+            } else if(controller->get_state(C_Down))
             {
                 transform->motion.y = player_speed;
             } else {
                 transform->motion.y = 0;
             }
 
-            if(controller->get_state('a'))
+            if(controller->get_state(C_Left))
             {
                 transform->motion.x = -player_speed;
-            } else if(controller->get_state('d'))
+            } else if(controller->get_state(C_Right))
             {
                 transform->motion.x = player_speed;
             } else {
