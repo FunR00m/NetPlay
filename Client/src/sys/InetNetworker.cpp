@@ -46,7 +46,9 @@ void InetNetworker::connect(std::string address)
     sockaddr_in server_address;
     bzero(&server_address, sizeof(server_address));
     server_address.sin_port = htons(8001);
-    server_address.sin_addr.s_addr = htonl(INADDR_ANY);
+    // server_address.sin_addr.s_addr = (((((117 << 8) | 0) << 8) | 168) << 8) | 192;
+    // server_address.sin_addr.s_addr = htonl(INADDR_ANY);
+    server_address.sin_addr.s_addr = inet_addr(address.c_str());
     server_address.sin_family = AF_INET;
 
     if(::connect(m_socket, (sockaddr*)&server_address, sizeof(server_address)) == -1)
@@ -65,6 +67,25 @@ void InetNetworker::disconnect()
     {
         m_running = false;
         m_talk_thread->join();
+        
+        {
+            m_responses_mtx.lock();
+
+            m_responses_size = 0;
+            std::queue<PackedData> empty_queue;
+            std::swap(m_responses, empty_queue);
+
+            m_responses_mtx.unlock();
+        }
+
+        {
+            m_snapshots_mtx.lock();
+
+            std::queue<PackedData> empty_queue;
+            std::swap(m_snapshots, empty_queue);
+
+            m_snapshots_mtx.unlock();
+        }
     }
 }
 
@@ -97,7 +118,10 @@ void InetNetworker::talk_loop()
         PackedData snapshot;
 
         // Получаем пакет с сервера
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         snapshot = read_data(m_socket);
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        debug(std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()));
 
         // Проверяем, содержит ли пакет данные
         if(snapshot.size() == 0)

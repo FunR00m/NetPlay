@@ -65,6 +65,12 @@ public:
     /// с момента предыдущего вызова этой функции.
     PackedData fetch_changes();
 
+    /// @brief Блокирует контроллер
+    void lock();
+
+    /// @brief Разблокирует контроллер
+    void unlock();
+
 private:
     /// @brief Словарь текущих состояний элементов управления
     std::map<Control, bool> m_control_states;
@@ -72,6 +78,10 @@ private:
     /// @brief Список элементов, изменивших состояние с момента
     /// последнего вызова fetch_chages()
     std::vector<Control> m_changed_controls;
+
+    /// @brief Заблокирован ли контроллер.
+    /// Если да, то состояния элементов не будут меняться.
+    bool m_locked;
     
 };
 

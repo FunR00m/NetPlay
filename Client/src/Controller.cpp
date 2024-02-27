@@ -7,13 +7,16 @@ namespace engine
 
 Controller::Controller()
 {
-    
+    m_locked = false;
 }
 
 void Controller::set_state(Control control, bool state)
 {
-    m_control_states[control] = state;
-    m_changed_controls.push_back(control);
+    if(!m_locked)
+    {
+        m_control_states[control] = state;
+        m_changed_controls.push_back(control);
+    }
 }
 
 void Controller::press(Control control)
@@ -66,6 +69,16 @@ PackedData Controller::fetch_changes()
     m_changed_controls.clear();
 
     return data;
+}
+
+void Controller::lock()
+{
+    m_locked = true;
+}
+
+void Controller::unlock()
+{
+    m_locked = false;
 }
 
 }

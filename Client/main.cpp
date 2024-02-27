@@ -49,7 +49,8 @@ public:
                     about = false;
                 } else if(selection == 0)
                 {
-                    m_game->connect("localhost:8001");
+                    m_game->connect("127.0.0.1");
+                    m_game->get_controller()->unlock();
                     status = 1;
                     hide_menu();
                     return;
@@ -90,6 +91,7 @@ public:
             if(m_game->get_keyboard()->get_state(SDLK_ESCAPE))
             {
                 m_game->get_keyboard()->set_state(SDLK_ESCAPE, false);
+                m_game->get_controller()->lock();
                 show_pause();
                 selection = 0;
                 status = 2;
@@ -110,6 +112,7 @@ public:
                 if(selection == 0)
                 {
                     status = 1;
+                    m_game->get_controller()->unlock();
                     hide_pause();
                     return;
                 } else if(selection == 1)
