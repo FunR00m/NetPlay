@@ -37,19 +37,40 @@ public:
     /// Stops the renderer, for example destroys the window.
     void stop() override;
     
-    /// Sets the window title
-    /// - Parameter title: The new title
+    /// @brief Устанавливает заголовок окна
+    /// @param title Новый заголовок
     void set_window_title(std::string title) override;
 
-    /// Is the quit event caught
+    /// @return ```true```, если окно было закрыто, иначе ```false```
     bool is_quit() override;
+
+    /// @brief Устанавливает размер окна
+    /// @param width Ширина в пикселах
+    /// @param height Высота в пикселах
+    void set_window_size(int width, int height);
+
+    /// @brief Устанавливает масштаб окна
+    /// @param scale Коэффициент масштабирования
+    void set_scale(float scale);
+
+    /// @brief Вкючает полноэкранный режим
+    void enable_fullscreen();
+
+    /// @brief Выключает полноэкранный режим
+    void disable_fullscreen();
     
 private:
-    SDL_Window *window_;
-    SDL_Renderer *renderer_;
-    std::string window_title_;
+    SDL_Window *m_window;
+    SDL_Renderer *m_renderer;
+    std::string m_window_title;
     
     bool m_quit;
+    float m_scale;
+    
+    /// Отношение установленной ширины к установленной высоте окна
+    double m_established_ratio;
+
+    bool m_fullscreen;
 };
 
 }

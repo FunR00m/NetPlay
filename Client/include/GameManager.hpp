@@ -27,6 +27,7 @@
 #include <map>
 #include <unordered_map>
 #include <memory>
+#include <chrono>
 
 #include "Object.hpp"
 #include "IComponent.hpp"
@@ -58,6 +59,9 @@ public:
     
     /// @returns Указатель на корневой объект клиента
     std::shared_ptr<Object> get_client_root();
+    
+    /// @returns Указатель на корневой объект клиента
+    std::shared_ptr<Object> get_root();
     
     /// Добавляет дочерний объект корневому объекту сервера
     std::shared_ptr<Object> add_server_object();
@@ -135,6 +139,9 @@ public:
 
     /// @return Подключен ли клиент к серверу
     bool is_connected();
+
+    /// @return Количество миллисекунд, прошедших с запуска
+    long long get_client_time();
     
 private:
     /// Словарь вида *номер объекта-объект*
@@ -172,6 +179,8 @@ private:
 
     /// @brief Указатель на клавиатуру
     std::shared_ptr<Keyboard> m_keyboard;
+
+    std::chrono::steady_clock::time_point m_start_time;
     
     /// Функция главного игрового цикла.
     void game_loop();

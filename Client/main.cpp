@@ -14,9 +14,10 @@
 
 #include "Components/Transform.hpp"
 #include "Components/Sprite.hpp"
+#include "Components/AnimatedSprite.hpp"
 #include "Components/NullComp.hpp"
 
-#include "Controls.hpp"
+#include "GameControls.hpp"
 
 #include "Systems/RenderSystem.hpp"
 
@@ -57,6 +58,10 @@ public:
                 } else if(selection == 1)
                 {
                     about = true;
+                    menu->get_child("About")
+                        ->get_child("Cube")
+                        ->get_component<AnimatedSprite>()
+                        ->start(m_game->get_client_time());
                 } else if(selection == 2)
                 {
                     m_game->stop();
@@ -102,6 +107,7 @@ public:
             if(m_game->get_keyboard()->get_state(SDLK_ESCAPE))
             {
                 m_game->get_keyboard()->set_state(SDLK_ESCAPE, false);
+                m_game->get_controller()->unlock();
                 hide_pause();
                 status = 1;
             }
@@ -255,6 +261,35 @@ int game_test()
         sprite->size = { 800, 600 };
         sprite->name.s() = "sprites/menu_about.png";
         sprite->z_layer = 2;
+
+        {
+            auto object_2 = object->add_child("Cube");
+
+            object_2->transform()->pos = { 250, 50 };
+
+            auto sprite_2 = object_2->add_component<AnimatedSprite>();
+            sprite_2->size = { 100, 50 };
+            sprite_2->z_layer = 3;
+            sprite_2->set_frame_length(70);
+            sprite_2->set_repeat(true);
+            for(int i = 1; i <= 13; i++)
+            {
+                sprite_2->add_frame(
+                            "sprites/frames/test_" +
+                            std::to_string(i) +
+                            ".png"
+                            );
+            }
+
+            for(int i = 12; i >= 2; i--)
+            {
+                sprite_2->add_frame(
+                            "sprites/frames/test_" +
+                            std::to_string(i) +
+                            ".png"
+                            );
+            }
+        }
     }
 
     auto pause = game_manager.add_client_object("Pause");

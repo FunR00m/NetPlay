@@ -5,7 +5,7 @@ namespace engine
 
 Sprite::Sprite()
 {
-    name = std::string("Empty");
+    name = std::string("sprites/void.png");
     size = { 100, 100 };
     visible = true;
 }

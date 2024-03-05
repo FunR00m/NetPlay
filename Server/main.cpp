@@ -147,7 +147,7 @@ int game_test()
         auto background = game.add_object("Background");
         background->transform()->pos = { 0, 0 };
         auto sprite = background->add_component<Sprite>();
-        sprite->name.s() = "sprites/level_1.png";
+        sprite->name.s() = "sprites/tiles/first.png";
         sprite->size = { 800, 600 };
         sprite->z_layer = -1;
     }
@@ -160,7 +160,7 @@ int game_test()
         box_transform->pos.x = 50 + 50 * (i % 10);
         box_transform->pos.y = 500 + 10 * (i / 10);
 
-        auto box_collider = box->add_component<Collider>();
+        auto box_collider = box->add_component<TriggerCollider>();
         box_collider->rect = { 50, 50 };
 
         auto sprite = box->add_component<Sprite>();

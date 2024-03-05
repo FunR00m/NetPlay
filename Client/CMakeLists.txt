@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.23)
 project(Client)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -9,16 +9,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_IMAGE REQUIRED)
 
-# Добавляем папку include в пути поиска заголовочных файлов
-include_directories(include)
-
-# include_directories(/usr/local/include)
-include_directories(third-party/include)
-# include_directories(Client ${SDL2_INCLUDE_DIRS})
-
 # Добавляем исходные файлы проекта
-add_executable(Client
-        main.cpp
+set(COMPILE_FILES
         src/GameManager.cpp
         src/Object.cpp
         src/Fields.cpp
@@ -27,6 +19,7 @@ add_executable(Client
         src/sys/InetNetworker.cpp
         src/Components/Transform.cpp
         src/Components/Sprite.cpp
+        src/Components/AnimatedSprite.cpp
         src/Systems/RenderSystem.cpp
         src/sys/TextureSDL.cpp
         src/sys/RendererSDL.cpp
@@ -35,17 +28,25 @@ add_executable(Client
         src/Keyboard.cpp
 )
 
-# Добавляем необходимые библиотеки, если нужно
-# if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")
-#        target_link_libraries(Client thr)
-# endif()
+add_library(Client
+        ${COMPILE_FILES}
+)
 
-# target_link_directories(Client PUBLIC /usr/local/lib)
+add_executable(EngineTest
+        main.cpp
+        ${COMPILE_FILES}
+)
+
+# Добавляем папку include в пути поиска заголовочных файлов
+target_include_directories(Client PRIVATE include)
+target_include_directories(EngineTest PRIVATE include)
+target_include_directories(Client PUBLIC third-party/include)
+target_include_directories(EngineTest PUBLIC third-party/include)
+
 target_link_directories(Client PUBLIC third-party/lib)
-# target_link_directories(Client PUBLIC ${SDL2_LIBDIR})
+target_link_directories(EngineTest PUBLIC third-party/lib)
 target_link_libraries(Client SDL2 SDL2_image)
-
-configure_file(${CMAKE_SOURCE_DIR}/image.png ${CMAKE_BINARY_DIR}/image.png COPYONLY)
+target_link_libraries(EngineTest SDL2 SDL2_image)
 
 # Указываем директорию для собранных бинарных файлов
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

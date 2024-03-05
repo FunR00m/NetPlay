@@ -15,13 +15,19 @@ namespace sys
 
 void RendererSDL::setup()
 {
+    m_quit = false;
+    m_scale = 1.0f;
+
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    window_ = SDL_CreateWindow("0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
-    set_window_title(window_title_);
-    renderer_ = SDL_CreateRenderer(window_, -1, 0);
+    m_window = SDL_CreateWindow(
+            "0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            800 * m_scale, 600 * m_scale,
+             0);
+    m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
-    m_quit = false;
+    set_window_size(800, 600);
+    set_window_title(m_window_title);
 }
 
 void RendererSDL::handle_events(std::shared_ptr<Keyboard> keyboard)
@@ -68,22 +74,50 @@ void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
         return;
     }
     
-    SDL_Texture *sdl_texture = SDL_CreateTextureFromSurface(renderer_, native_texture->get_data());
-    SDL_Rect dstrect = { pos.x, pos.y, size.x, size.y };
-    SDL_RenderCopy(renderer_, sdl_texture, NULL, &dstrect);
+    SDL_Texture *sdl_texture = SDL_CreateTextureFromSurface(m_renderer, native_texture->get_data());
+
+    // Определяем смещение, чтобы центр находился в центре окна. Это
+    // необходимо при включении полноэкранного режима, когда
+    // соотношение сторон экрана не совпадает с используемым в проекте.
+    int offset_x, offset_y;
+    int window_width, window_height;
+    SDL_GetWindowSize(m_window, &window_width, &window_height);
+    double window_ratio = (
+                        static_cast<double>(window_width) /
+                        static_cast<double>(window_height)
+    );
+    if(window_ratio > m_established_ratio)
+    {
+        offset_x = (window_width - m_established_ratio * window_height) / 2;
+        offset_y = 0;
+    } else {
+        offset_x = 0;
+        offset_y = (window_height - window_width / m_established_ratio) / 2;
+    }
+
+
+
+    SDL_Rect dstrect = {
+        (int)(pos.x * m_scale + offset_x),
+        (int)(pos.y * m_scale + offset_y),
+        (int)(size.x * m_scale),
+        (int)(size.y * m_scale)
+    };
+
+    SDL_RenderCopy(m_renderer, sdl_texture, NULL, &dstrect);
     SDL_DestroyTexture(sdl_texture);
 }
 
 void RendererSDL::refresh()
 {
-    SDL_RenderPresent(renderer_);
-    SDL_RenderClear(renderer_);
+    SDL_RenderPresent(m_renderer);
+    SDL_RenderClear(m_renderer);
 }
 
 void RendererSDL::stop()
 {
-    SDL_DestroyWindow(window_);
-    SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(m_window);
+    SDL_DestroyRenderer(m_renderer);
     SDL_Quit();
     IMG_Quit();
 }
@@ -92,8 +126,31 @@ void RendererSDL::set_window_title(std::string title)
 {
     SDL_version version;
     SDL_GetVersion(&version);
-    SDL_SetWindowTitle(window_, (title + " (SDL " + std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.patch) + ")").c_str());
-    window_title_ = title;
+    SDL_SetWindowTitle(m_window, (title + " (SDL " + std::to_string(version.major) + "." + std::to_string(version.minor) + "." + std::to_string(version.patch) + ")").c_str());
+    m_window_title = title;
+}
+
+void RendererSDL::set_window_size(int width, int height)
+{
+    SDL_SetWindowSize(m_window, width * m_scale, height * m_scale);
+    m_established_ratio = static_cast<double>(width) / static_cast<double>(height);
+}
+
+void RendererSDL::set_scale(float scale)
+{
+    m_scale = scale;
+}
+
+void RendererSDL::enable_fullscreen()
+{
+    m_fullscreen = true;
+    SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
+}
+
+void RendererSDL::disable_fullscreen()
+{
+    m_fullscreen = false;
+    SDL_SetWindowFullscreen(m_window, 0);
 }
 
 }

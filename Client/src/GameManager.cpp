@@ -55,6 +55,11 @@ std::shared_ptr<Object> GameManager::get_client_root()
     return m_client_root;
 }
 
+std::shared_ptr<Object> GameManager::get_root()
+{
+    return m_client_root;
+}
+
 std::shared_ptr<Object> GameManager::add_object(long long parent_id)
 {
     if(m_id_to_object.find(parent_id) == m_id_to_object.end())
@@ -174,6 +179,10 @@ void GameManager::start()
 
     // Запускаем игровой цикл
     m_running = true;
+
+    // Задаём время запуска
+    m_start_time = std::chrono::steady_clock::now();
+
     game_loop();
 }
 
@@ -216,7 +225,7 @@ void GameManager::game_loop()
         }
 
         // Ждём перед следующей итерацией
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -315,6 +324,12 @@ void GameManager::stop()
     {
         disconnect();
     }
+}
+
+long long GameManager::get_client_time()
+{
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::milliseconds>(now - m_start_time).count();
 }
 
 }
