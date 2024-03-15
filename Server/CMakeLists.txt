@@ -7,8 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(include)
 
 # Добавляем исходные файлы проекта
-add_executable(Server
-        main.cpp
+set(COMPILE_FILES
         src/Fields.cpp
         src/GameManager.cpp
         src/Object.cpp
@@ -22,6 +21,16 @@ add_executable(Server
         src/Systems/MoveSystem.cpp
         src/Controller.cpp
 )
+
+add_executable(EngineTestServer
+    main.cpp
+    ${COMPILE_FILES}
+)
+
+add_library(Server
+    ${COMPILE_FILES}
+)
+
 
 # Добавляем необходимые библиотеки, если нужно
 # if(CMAKE_SYSTEM_NAME EQUAL "FreeBSD")

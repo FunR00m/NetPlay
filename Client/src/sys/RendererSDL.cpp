@@ -13,21 +13,29 @@ namespace engine
 namespace sys
 {
 
-void RendererSDL::setup()
+RendererSDL::RendererSDL()
 {
+    m_running = false;
     m_quit = false;
     m_scale = 1.0f;
+    m_established_width = 800;
+    m_established_height = 600;
+    m_window_title = "NetPlay Game";
+}
 
+void RendererSDL::setup()
+{
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     m_window = SDL_CreateWindow(
             "0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            800 * m_scale, 600 * m_scale,
+            m_established_width * m_scale, m_established_height * m_scale,
              0);
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
-    set_window_size(800, 600);
     set_window_title(m_window_title);
+
+    m_running = true;
 }
 
 void RendererSDL::handle_events(std::shared_ptr<Keyboard> keyboard)
@@ -86,13 +94,17 @@ void RendererSDL::render_sprite(std::shared_ptr<Sprite> sprite)
                         static_cast<double>(window_width) /
                         static_cast<double>(window_height)
     );
-    if(window_ratio > m_established_ratio)
+    double established_ratio = (
+                        static_cast<double>(m_established_width) /
+                        static_cast<double>(m_established_height)
+    );
+    if(window_ratio > established_ratio)
     {
-        offset_x = (window_width - m_established_ratio * window_height) / 2;
+        offset_x = (window_width - established_ratio * window_height) / 2;
         offset_y = 0;
     } else {
         offset_x = 0;
-        offset_y = (window_height - window_width / m_established_ratio) / 2;
+        offset_y = (window_height - window_width / established_ratio) / 2;
     }
 
 
@@ -132,8 +144,14 @@ void RendererSDL::set_window_title(std::string title)
 
 void RendererSDL::set_window_size(int width, int height)
 {
-    SDL_SetWindowSize(m_window, width * m_scale, height * m_scale);
-    m_established_ratio = static_cast<double>(width) / static_cast<double>(height);
+    if(m_running)
+    {
+        SDL_SetWindowSize(m_window, width * m_scale, height * m_scale);
+    }
+
+    // m_established_ratio = static_cast<double>(width) / static_cast<double>(height);
+    m_established_width = width;
+    m_established_height = height;
 }
 
 void RendererSDL::set_scale(float scale)

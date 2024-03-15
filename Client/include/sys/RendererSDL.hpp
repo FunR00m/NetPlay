@@ -22,6 +22,8 @@ namespace sys
 class RendererSDL : public IRenderer
 {
 public:
+    RendererSDL();
+
     /// Sets the renderer up, for example creates the window.
     void setup() override;
     
@@ -65,10 +67,15 @@ private:
     std::string m_window_title;
     
     bool m_quit;
+    bool m_running;
     float m_scale;
     
     /// Отношение установленной ширины к установленной высоте окна
-    double m_established_ratio;
+    // double m_established_ratio;
+
+    /// Установленные размеры окна
+    int m_established_width;
+    int m_established_height;
 
     bool m_fullscreen;
 };

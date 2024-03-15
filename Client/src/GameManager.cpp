@@ -146,9 +146,9 @@ void GameManager::add_system(std::shared_ptr<ISystem> system)
     m_systems.push_back(system);
 }
 
-void GameManager::connect(std::string adress)
+void GameManager::connect(std::string address)
 {
-    m_networker->connect(adress);
+    m_networker->connect(address);
     m_connected = true;
 }
 

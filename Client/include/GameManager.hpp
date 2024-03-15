@@ -131,8 +131,8 @@ public:
     void stop();
 
     /// @brief Подключает к серверу
-    /// @param adress Адрес сервера
-    void connect(std::string adress);
+    /// @param address Адрес сервера
+    void connect(std::string address);
 
     /// @brief Отключает от сервера
     void disconnect();
