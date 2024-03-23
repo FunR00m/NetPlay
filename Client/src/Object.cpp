@@ -83,7 +83,7 @@ std::shared_ptr<Object> Object::get_child(std::string name)
 {
     if(m_name_to_child.find(name) == m_name_to_child.end())
     {
-        warning(std::string("[Object::get_child(\"") + std::string(name) + std::string("\")] Child not found. Object ID: " + std::to_string(m_id)));
+        // warning(std::string("[Object::get_child(\"") + std::string(name) + std::string("\")] Child not found. Object ID: " + std::to_string(m_id)));
         return nullptr;
     }
     

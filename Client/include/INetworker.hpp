@@ -33,7 +33,7 @@ class INetworker
 public:
     /// @brief Подключает к серверу.
     /// @param address Адрес сервера в стандартном формате
-    virtual void connect(std::string address) = 0;
+    virtual void connect(const std::string& address) = 0;
     
     /// @brief Отключает от сервера.
     virtual void disconnect() = 0;

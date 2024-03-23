@@ -32,7 +32,7 @@ public:
     /// @param address Адрес сервера
     /// @note Чтение адреса не реализовано. Подключается к
     /// localhost:8001
-    void connect(std::string address) override;
+    void connect(const std::string& address) override;
     
     /// @brief Отключает сервера
     void disconnect() override;

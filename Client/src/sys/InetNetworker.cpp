@@ -28,7 +28,7 @@ InetNetworker::InetNetworker()
     m_running = false;
 }
 
-void InetNetworker::connect(std::string address)
+void InetNetworker::connect(const std::string& address)
 {
     if(m_running)
     {
@@ -118,10 +118,10 @@ void InetNetworker::talk_loop()
         PackedData snapshot;
 
         // Получаем пакет с сервера
-        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         snapshot = read_data(m_socket);
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        debug(std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()));
+        // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        // debug(std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()));
 
         // Проверяем, содержит ли пакет данные
         if(snapshot.size() == 0)
@@ -157,7 +157,13 @@ void InetNetworker::talk_loop()
         m_responses_mtx.unlock();
 
         // Отправляем ответ
+        debug("Response size: " + std::to_string(snapshot.size()));
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
         send_data(m_socket, snapshot);
+
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        debug("Send time: " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()));
 
         // Удаляем данные ответа
         snapshot.clear();
@@ -179,7 +185,7 @@ void InetNetworker::send_data(int socket, PackedData data)
     const int buffer_size = BUFFER_SIZE;
     for(long long i = 0; i + buffer_size < length; i += buffer_size)
     {
-	// Последовательно отправляем куски данных размером buffer_size
+        // Последовательно отправляем куски данных размером buffer_size
         write(socket, raw_data + i, buffer_size);
     }
     // Отправляем оставшиеся данные
